@@ -1,0 +1,1751 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cloud / DevOps Knowledge Base</title>
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --panel: #111827;
+      --panel2: #1f2937;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --line: #374151;
+      --accent: #38bdf8;
+      --accent2: #22c55e;
+      --warn: #f59e0b;
+      --danger: #ef4444;
+      --card: #020617;
+      --code: #0b1220;
+      --shadow: 0 14px 40px rgba(0,0,0,.35);
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      font-family: Inter, Segoe UI, Roboto, Arial, sans-serif;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(56,189,248,.13), transparent 30%),
+        radial-gradient(circle at 85% 20%, rgba(34,197,94,.09), transparent 25%),
+        
+        var(--bg);
+      color: var(--text);
+      line-height: 1.55;
+    }
+
+    .wrap {
+      width: min(1500px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .hero {
+      position: relative;
+      min-height: 390px;
+      display: flex;
+      align-items: center;
+      z-index: 1;
+      padding: 50px 24px 40px;
+      border-bottom: 1px solid rgba(56,189,248,.26);
+      overflow: hidden;
+      box-shadow: 0 24px 70px rgba(0,0,0,.46);
+    }
+
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: url("./devops-hero.png") right center / cover no-repeat;
+      z-index: -1;
+}
+
+    .hero-overlay {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 16% 34%, rgba(56,189,248,.22), transparent 30%),
+        radial-gradient(circle at 82% 28%, rgba(34,197,94,.13), transparent 26%),
+        linear-gradient(180deg, transparent 0%, rgba(15,23,42,.94) 100%);
+    }
+
+    .hero-inner {
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero h1 {
+      margin: 0 0 12px;
+    }
+
+    .hero-title {
+      padding: 0;
+      border: 0;
+      background: transparent;
+      color: #e0f7ff;
+      font-size: clamp(34px, 5.6vw, 76px);
+      font-weight: 950;
+      letter-spacing: -0.065em;
+      line-height: .95;
+      text-align: left;
+      cursor: pointer;
+      text-shadow:
+        0 0 12px rgba(56,189,248,.64),
+        0 0 34px rgba(56,189,248,.38),
+        0 0 76px rgba(34,197,94,.18);
+    }
+
+    .hero-title:hover {
+      color: #ffffff;
+      transform: none;
+      filter: drop-shadow(0 0 18px rgba(56,189,248,.48));
+    }
+
+    .hero-subtitle {
+      margin: 0;
+      max-width: 920px;
+      color: #dbeafe;
+      font-size: clamp(15px, 1.5vw, 18px);
+      text-shadow: 0 1px 16px rgba(0,0,0,.8);
+    }
+
+    .hero-notice {
+      margin-top: 18px;
+      max-width: 920px;
+      padding: 12px 14px;
+      border: 1px solid rgba(56,189,248,.28);
+      background: rgba(2,6,23,.58);
+      border-radius: 14px;
+      color: #bae6fd;
+      font-size: 14px;
+      backdrop-filter: blur(10px);
+    }
+
+    main.app-layout {
+      padding: 24px 0 64px;
+    }
+
+    .app-layout {
+      display: grid;
+      grid-template-columns: 260px minmax(0, 1fr) 230px;
+      gap: 18px;
+      align-items: start;
+    }
+
+    .side-panel,
+    .center-panel {
+      min-width: 0;
+    }
+
+    .panel-card {
+      border: 1px solid var(--line);
+      background: rgba(17,24,39,.86);
+      border-radius: 20px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+    }
+
+    .sticky-panel {
+      position: sticky;
+      top: 18px;
+    }
+
+    .panel-title {
+      margin: 0 0 10px;
+      font-size: 14px;
+      color: #bfdbfe;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+    }
+
+    .menu-title {
+      margin-top: 18px;
+    }
+
+    input,
+    textarea,
+    select,
+    button {
+      font: inherit;
+    }
+
+    input,
+    textarea,
+    select {
+      width: 100%;
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 12px 13px;
+      outline: none;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(56,189,248,.14);
+    }
+
+    textarea {
+      min-height: 95px;
+      resize: vertical;
+    }
+
+    button {
+      cursor: pointer;
+      border: 1px solid var(--line);
+      background: var(--panel2);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 11px 14px;
+      transition: .15s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      border-color: var(--accent);
+    }
+
+    .primary {
+      background: linear-gradient(135deg, #0284c7, #16a34a);
+      border: 0;
+      font-weight: 700;
+    }
+
+    .danger {
+      border-color: rgba(239,68,68,.45);
+      color: #fecaca;
+      background: rgba(239,68,68,.12);
+    }
+
+    .left-panel input,
+    .left-panel select {
+      margin-bottom: 10px;
+    }
+
+    .side-nav {
+      margin: 0;
+      display: grid;
+      gap: 7px;
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .nav-btn {
+      width: 100%;
+      text-align: left;
+      padding: 9px 11px;
+      border-radius: 11px;
+      color: var(--muted);
+      background: rgba(31,41,55,.75);
+    }
+
+    .nav-btn.active {
+      color: #02131f;
+      background: linear-gradient(135deg, #38bdf8, #22c55e);
+      border-color: transparent;
+      font-weight: 850;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin: 0;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.62);
+      border-radius: 15px;
+      padding: 13px;
+      box-shadow: none;
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 25px;
+      color: white;
+      line-height: 1;
+    }
+
+    .stat span {
+      display: block;
+      margin-top: 6px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .study-tip {
+      margin-top: 14px;
+      padding: 13px;
+      border: 1px solid rgba(34,197,94,.28);
+      background: rgba(34,197,94,.08);
+      border-radius: 15px;
+    }
+
+    .study-tip strong {
+      display: block;
+      color: #bbf7d0;
+      margin-bottom: 5px;
+    }
+
+    .study-tip p {
+      margin: 0;
+      color: #d1fae5;
+      font-size: 13px;
+    }
+
+    .section {
+      margin: 0 0 28px;
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      align-items: center;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 10px;
+    }
+
+    h2 {
+      margin: 0;
+      font-size: 26px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-desc {
+      margin: 4px 0 0;
+      color: var(--muted);
+      max-width: 850px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    details.card {
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.78);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    details.card[open] {
+      border-color: rgba(56,189,248,.55);
+    }
+
+    summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 15px 16px;
+    }
+
+    summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .summary-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .title {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-width: 0;
+    }
+
+    .title strong {
+      font-size: 17px;
+    }
+
+    .tagline {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .badge {
+      white-space: nowrap;
+      font-size: 12px;
+      color: #bae6fd;
+      border: 1px solid rgba(56,189,248,.35);
+      background: rgba(56,189,248,.08);
+      padding: 5px 9px;
+      border-radius: 999px;
+    }
+
+    .content {
+      border-top: 1px solid var(--line);
+      padding: 15px 16px 17px;
+      background: rgba(15,23,42,.56);
+    }
+
+    .block {
+      margin: 0 0 15px;
+    }
+
+    .block h3 {
+      margin: 0 0 7px;
+      font-size: 14px;
+      color: #bfdbfe;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+    }
+
+    .block p {
+      margin: 0;
+      color: #d1d5db;
+    }
+
+    ul {
+      margin: 8px 0 0 20px;
+      padding: 0;
+    }
+
+    li {
+      margin: 5px 0;
+    }
+
+    code {
+      background: var(--code);
+      color: #a7f3d0;
+      border: 1px solid rgba(167,243,208,.18);
+      border-radius: 6px;
+      padding: 2px 5px;
+      font-family: Consolas, Monaco, monospace;
+      font-size: 13px;
+    }
+
+    .questions li {
+      color: #fef3c7;
+    }
+
+    .tracker {
+      border: 1px solid var(--line);
+      background: rgba(17,24,39,.86);
+      border-radius: 22px;
+      padding: 18px;
+      box-shadow: var(--shadow);
+      margin-top: 28px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr .6fr;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin: 10px 0 0;
+    }
+
+    .question-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .saved-q {
+      border: 1px solid var(--line);
+      background: rgba(2,6,23,.64);
+      border-radius: 14px;
+      padding: 13px;
+    }
+
+    .saved-q header {
+      position: static;
+      padding: 0;
+      border: 0;
+      background: transparent;
+      backdrop-filter: none;
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: start;
+    }
+
+    .saved-q h3 {
+      margin: 0;
+      font-size: 16px;
+    }
+
+    .saved-q .meta {
+      color: var(--muted);
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    .saved-q p {
+      margin: 9px 0 0;
+      color: #d1d5db;
+      white-space: pre-wrap;
+    }
+
+    .empty {
+      color: var(--muted);
+      padding: 16px;
+      border: 1px dashed var(--line);
+      border-radius: 14px;
+      text-align: center;
+    }
+
+    footer {
+      color: var(--muted);
+      border-top: 1px solid var(--line);
+      padding: 26px 0 42px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 1180px) {
+      .app-layout {
+        grid-template-columns: 230px minmax(0, 1fr);
+      }
+
+      .right-panel {
+        display: none;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .hero {
+        min-height: 300px;
+        padding: 38px 18px 32px;
+        background-position: 63% center;
+      }
+
+      .app-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sticky-panel {
+        position: static;
+      }
+
+      .side-nav {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+      }
+
+      .nav-btn {
+        width: auto;
+        text-align: center;
+        border-radius: 999px;
+      }
+
+      .right-panel {
+        display: block;
+      }
+
+      .stats {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .stats {
+        grid-template-columns: 1fr;
+      }
+
+      .summary-row {
+        align-items: flex-start;
+        flex-direction: column;
+      }
+
+      .badge {
+        white-space: normal;
+      }
+    }
+
+    @media print {
+      body {
+        background: white;
+        color: black;
+      }
+
+      .hero,
+      .left-panel,
+      .right-panel,
+      .tracker,
+      footer {
+        display: none;
+      }
+
+      .app-layout {
+        display: block;
+      }
+
+      details.card {
+        break-inside: avoid;
+        border-color: #bbb;
+        background: white;
+        box-shadow: none;
+      }
+
+      details.card:not([open]) .content {
+        display: block;
+      }
+
+      .content {
+        background: white;
+      }
+
+      .badge,
+      .tagline,
+      .section-desc {
+        color: #333;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="hero">
+    <div class="hero-overlay"></div>
+
+    <div class="wrap hero-inner">
+      <h1>
+        <button id="homeReset" class="hero-title">
+          Cloud / DevOps <br>Knowledge Base
+        </button>
+      </h1>
+
+      <p class="hero-subtitle">
+        Overview for Azure, AWS, CI/CD, Terraform, Kubernetes, Docker, <br>Windows, Linux, Networking and Git.
+      </p>
+
+  
+    </div>
+  </header>
+
+  <main class="wrap app-layout">
+    <aside class="side-panel left-panel">
+      <div class="panel-card sticky-panel">
+        <h2 class="panel-title">Vyhľadávanie</h2>
+
+        <input id="search" placeholder="Hľadaj napr. AKS, IAM, subnet, Dockerfile..." />
+
+        <select id="openMode">
+          <option value="normal">Klikateľné karty</option>
+          <option value="open">Otvoriť všetko</option>
+          <option value="closed">Zavrieť všetko</option>
+        </select>
+
+        <h2 class="panel-title menu-title">Menu tém</h2>
+        <nav id="nav" class="side-nav"></nav>
+      </div>
+    </aside>
+
+    <section class="center-panel">
+      <div id="content"></div>
+
+      <section class="tracker" id="moje-otazky">
+        <h2>Questions & Answers</h2>
+        
+
+        <div class="form-grid" style="margin-top:16px;">
+          <input id="qArea" placeholder="Oblasť: napr. Kubernetes, AWS IAM, Terraform" />
+          <input id="qText" placeholder="Otázka z pohovoru" />
+          <select id="qStatus">
+            <option value="Neviem">Neviem</option>
+            <option value="Čiastočne">Čiastočne</option>
+            <option value="Zvládam">Zvládam</option>
+          </select>
+        </div>
+
+        <textarea id="qAnswer" placeholder="Moja poznámka / správna odpoveď / čo si mám zopakovať"></textarea>
+
+        <div class="actions">
+          <button class="primary" id="addQuestion">Add question</button>
+          <button id="exportQuestions">Export JSON</button>
+          <button class="danger" id="clearQuestions">Remove all questions</button>
+        </div>
+
+        <div class="question-list" id="questionList"></div>
+      </section>
+    </section>
+
+    <aside class="side-panel right-panel">
+      <div class="panel-card sticky-panel">
+        <h2 class="panel-title">Prehľad</h2>
+        <section class="stats" id="stats"></section>
+
+        
+      </div>
+    </aside>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      Tip: použi vyhľadávanie vľavo alebo Ctrl+F v prehliadači. Pri učení si otvor kartu a skús odpovedať vlastnými slovami.
+    </div>
+  </footer>
+
+  <script>
+    const DATA = [
+      {
+        group: "Azure",
+        items: [
+          {
+            name: "Azure Entra ID",
+            type: "Identity",
+            what: "Cloud identity provider pre používateľov, skupiny, aplikácie a service principals. Rieši prihlásenie, SSO, MFA, Conditional Access a identity mimo samotných VM/serverov.",
+            use: "Používa sa na riadenie toho, kto alebo čo sa môže autentifikovať voči Azure a aplikáciám. Je základ pre enterprise prístup, app registrations a managed identities.",
+            remember: ["Tenant je identity boundary.", "Authentication hovorí kto si; authorization hovorí čo smieš robiť.", "Service principal je identita aplikácie alebo automatu.", "Managed identity je identita priradená Azure resource bez potreby manuálne spravovať secret."],
+            questions: ["Aký je rozdiel medzi Entra ID a Azure RBAC?", "Čo je service principal a kde sa používa?", "Prečo je managed identity bezpečnejšia než uložený client secret?", "Čo rieši Conditional Access?"]
+          },
+          {
+            name: "Azure RBAC",
+            type: "Access control",
+            what: "Role-Based Access Control určuje oprávnenia k Azure zdrojom. Role sa prideľujú na scope: management group, subscription, resource group alebo konkrétny resource.",
+            use: "Používa sa na princíp least privilege. Napríklad developer môže byť Reader na produkcii, Contributor na dev resource group a pipeline môže mať právo deployovať iba konkrétny resource.",
+            remember: ["Scope dedí oprávnenia smerom nadol.", "Built-in role: Owner, Contributor, Reader, User Access Administrator.", "Custom role dáva presnejšie oprávnenia.", "RBAC nie je to isté ako sieťové pravidlá."],
+            questions: ["Ako by si dal pipeline právo deployovať iba do jednej resource group?", "Rozdiel medzi Owner a Contributor?", "Čo znamená least privilege?", "Ako funguje dedenie oprávnení v Azure RBAC?"]
+          },
+          {
+            name: "Management Groups / Subscriptions / Resource Groups",
+            type: "Governance",
+            what: "Hierarchia organizácie Azure prostredí. Management groups združujú subscriptions, subscription je billing a isolation boundary, resource group je logický kontajner pre resources.",
+            use: "Používa sa na organizáciu prostredí, billing, policy, RBAC a lifecycle zdrojov. Typicky dev/test/prod subscriptions alebo oddelenie podľa tímov.",
+            remember: ["Resource group má región, ale môže obsahovať resources z rôznych regiónov.", "Policy a RBAC sa dajú aplikovať vyššie v hierarchii.", "Subscription má limity a kvóty.", "Zmazanie resource group zmaže resources v nej."],
+            questions: ["Kedy rozdeliť prostredia do viacerých subscriptions?", "Čo je resource group a prečo je dôležitá?", "Aký je rozdiel medzi subscription a tenantom?", "Ako by si organizoval dev/test/prod?"]
+          },
+          {
+            name: "Azure Policy",
+            type: "Governance",
+            what: "Služba na vynucovanie pravidiel nad Azure resources. Vie auditovať alebo blokovať nežiaduce konfigurácie, napríklad povinné tagy, povolené regióny alebo zákaz public IP.",
+            use: "Používa sa na compliance, štandardizáciu a guardrails. Pomáha zabezpečiť, aby tímy deployovali zdroje podľa pravidiel firmy.",
+            remember: ["Policy môže auditovať, deny alebo modifikovať.", "Initiative je skupina policies.", "Policy nie je náhrada za monitoring ani RBAC.", "Dobre funguje spolu s management groups."],
+            questions: ["Ako zabezpečíš, že všetky resources musia mať tag owner?", "Rozdiel medzi Azure Policy a RBAC?", "Čo je policy initiative?", "Čo sa stane pri deny policy?"]
+          },
+          {
+            name: "Azure Virtual Network",
+            type: "Networking",
+            what: "Privátna sieť v Azure. Obsahuje address space, subnets, route tables, DNS nastavenia a prepája resources ako VM, AKS alebo private endpoints.",
+            use: "Používa sa na izoláciu a riadenie sieťovej komunikácie. Je základ pre hybrid connectivity, segmentation a private access k PaaS službám.",
+            remember: ["Subnet je časť adresného rozsahu VNet.", "VNet peering prepája siete v Azure.", "CIDR rozsahy sa nesmú prekrývať pri peeringu/hybrid sieti.", "NSG riadi traffic na subnet alebo NIC úrovni."],
+            questions: ["Čo je subnet a prečo sa používa?", "Ako prepojíš dve VNets?", "Prečo je problém overlapping CIDR?", "Rozdiel medzi VNet a subnetom?"]
+          },
+          {
+            name: "Network Security Group",
+            type: "Networking",
+            what: "NSG je stateful firewall pravidiel pre inbound a outbound traffic na úrovni subnetu alebo network interface.",
+            use: "Používa sa na povolenie alebo blokovanie komunikácie medzi subnetmi, VM a internetom. Typicky obmedzí SSH/RDP iba z admin siete.",
+            remember: ["Pravidlá majú priority, nižšie číslo vyhráva.", "NSG je stateful, odpoveď na povolené spojenie sa automaticky povolí.", "Default rules existujú vždy.", "NSG nie je L7 firewall."],
+            questions: ["Ako povolíš SSH iba z jednej IP?", "Čo znamená priority v NSG?", "Rozdiel medzi NSG a Azure Firewall?", "Je NSG stateful alebo stateless?"]
+          },
+          {
+            name: "Azure Firewall",
+            type: "Security / Networking",
+            what: "Managed sieťový firewall pre centralizovanú ochranu. Podporuje network rules, application rules, NAT rules, threat intelligence a logging.",
+            use: "Používa sa v hub-spoke architektúre na kontrolu egress/ingress trafficu, centralizované logovanie a bezpečnostné pravidlá.",
+            remember: ["Je vhodný na centralizované riadenie trafficu.", "Vie FQDN pravidlá pre outbound HTTP/S.", "Často sa kombinuje s route tables.", "Nie je to to isté ako NSG."],
+            questions: ["Kedy by si použil Azure Firewall namiesto NSG?", "Čo je hub-spoke sieťová architektúra?", "Ako prinútiš subnet posielať traffic cez firewall?", "Čo sú application rules?"]
+          },
+          {
+            name: "VPN Gateway / ExpressRoute",
+            type: "Hybrid networking",
+            what: "VPN Gateway prepája on-premise sieť s Azure cez šifrovaný tunel cez internet. ExpressRoute je privátne dedikované pripojenie mimo verejného internetu.",
+            use: "VPN je často lacnejšia a rýchlejšia na zriadenie. ExpressRoute sa používa pri vyšších nárokoch na stabilitu, throughput a enterprise hybrid scenáre.",
+            remember: ["VPN používa IPsec tunel.", "ExpressRoute nie je internetová VPN.", "Gateway subnet je špeciálny subnet pre gateway.", "BGP sa používa na dynamický routing."],
+            questions: ["Rozdiel medzi Site-to-Site VPN a ExpressRoute?", "Načo je GatewaySubnet?", "Čo je BGP?", "Ako by si riešil hybrid connectivity do Azure?"]
+          },
+          {
+            name: "Private Link / Private Endpoint / Private DNS",
+            type: "Private access",
+            what: "Private Endpoint dáva PaaS službe privátnu IP adresu vo VNet. Private Link umožňuje privátny prístup k službe bez verejného internetu.",
+            use: "Používa sa, keď Storage, SQL, Key Vault alebo iné PaaS služby nemajú byť dostupné verejne.",
+            remember: ["Private endpoint je sieťová karta s privátnou IP.", "DNS je kritický, inak klient môže ísť na public endpoint.", "Public network access sa často vypína.", "NSG/route správanie závisí od konfigurácie služby."],
+            questions: ["Prečo po vytvorení private endpointu treba riešiť DNS?", "Ako zakážeš public access k Storage Accountu?", "Rozdiel medzi service endpoint a private endpoint?", "Čo je Private Link?"]
+          },
+          {
+            name: "Azure Load Balancer",
+            type: "Load balancing",
+            what: "Layer 4 load balancer pre TCP/UDP traffic. Rozdeľuje traffic medzi backend instances, napríklad VM alebo VMSS.",
+            use: "Používa sa pre jednoduché L4 vyvažovanie, inbound NAT rules a interné alebo verejné load balancing scenáre.",
+            remember: ["Funguje na L4, nie na HTTP routing podľa URL.", "Health probe určuje zdravie backendov.", "Môže byť public alebo internal.", "Pre L7 HTTP routing je vhodnejší Application Gateway alebo Front Door."],
+            questions: ["Rozdiel medzi Azure Load Balancer a Application Gateway?", "Čo je health probe?", "Kedy použiť internal load balancer?", "Na akej vrstve OSI pracuje?"]
+          },
+          {
+            name: "Application Gateway + WAF",
+            type: "Application delivery",
+            what: "Layer 7 load balancer pre HTTP/S aplikácie. Podporuje TLS termination, routing podľa path/host, cookie affinity a Web Application Firewall.",
+            use: "Používa sa pre web aplikácie, ktoré potrebujú URL-based routing, HTTPS offload alebo ochranu pred bežnými web útokmi.",
+            remember: ["Pracuje na L7.", "WAF chráni pred útokmi typu OWASP Top 10.", "Backend pool môže obsahovať VM, App Service alebo AKS ingress.", "Listener, rule, backend pool a probe tvoria základ konfigurácie."],
+            questions: ["Kedy použiť Application Gateway namiesto Load Balancera?", "Čo robí WAF?", "Čo je TLS termination?", "Ako funguje path-based routing?"]
+          },
+          {
+            name: "Azure Front Door / Traffic Manager",
+            type: "Global routing",
+            what: "Front Door je globálny L7 entry point s routingom, TLS, akceleráciou a WAF. Traffic Manager je DNS-based traffic routing podľa priority, performance alebo geography.",
+            use: "Front Door sa hodí pre globálne web aplikácie. Traffic Manager sa hodí na DNS failover alebo geografické smerovanie.",
+            remember: ["Front Door proxyuje HTTP/S traffic.", "Traffic Manager vracia DNS odpoveď, nie je proxy.", "Front Door vie WAF.", "DNS TTL ovplyvňuje rýchlosť failoveru pri Traffic Manageri."],
+            questions: ["Rozdiel medzi Front Door a Traffic Manager?", "Ktorá služba pracuje cez DNS?", "Ako riešiť globálny failover web aplikácie?", "Kde by si zapol WAF?"]
+          },
+          {
+            name: "Azure Virtual Machines",
+            type: "Compute",
+            what: "IaaS virtuálne servery v Azure. Spravuješ OS, patching, software, disky, sieť a bezpečnosť.",
+            use: "Používa sa pre legacy aplikácie, custom workloady, Windows/Linux servery alebo prípady, kde PaaS/kontajnery nie sú vhodné.",
+            remember: ["VM potrebuje OS disk a NIC.", "Availability Set/Zones riešia vyššiu dostupnosť.", "Managed disks zjednodušujú storage.", "Patching a hardening sú zodpovednosťou tímu."],
+            questions: ["Kedy by si použil VM namiesto App Service?", "Ako zabezpečíš vysokú dostupnosť VM?", "Čo je managed disk?", "Ako obmedzíš RDP/SSH prístup?"]
+          },
+          {
+            name: "Virtual Machine Scale Sets",
+            type: "Compute scaling",
+            what: "Skupina rovnakých VM instances, ktoré sa dajú automaticky škálovať podľa pravidiel alebo metriky.",
+            use: "Používa sa pre horizontálne škálovanie aplikácií na VM, batch workerov alebo backend pool za load balancerom.",
+            remember: ["Autoscale môže reagovať na CPU, queue length alebo custom metrics.", "Instances majú rovnaký image/model.", "Rolling upgrade znižuje downtime.", "VMSS sa často kombinuje s Load Balancerom alebo Application Gateway."],
+            questions: ["Čo je horizontálne škálovanie?", "Ako funguje autoscale vo VMSS?", "Rozdiel medzi VM a VMSS?", "Ako minimalizovať downtime pri update?"]
+          },
+          {
+            name: "Azure App Service",
+            type: "PaaS compute",
+            what: "Managed platforma na hostovanie web aplikácií a API bez správy serverov. Podporuje deployment slots, autoscale, custom domains a TLS.",
+            use: "Používa sa pre weby a API, kde chceš menej správy infraštruktúry než pri VM.",
+            remember: ["App Service Plan určuje compute kapacitu.", "Deployment slot umožňuje blue/green swap.", "Runtime môže byť .NET, Java, Node.js, Python, PHP alebo container.", "Scaling je na úrovni planu."],
+            questions: ["Čo je App Service Plan?", "Načo sú deployment slots?", "Kedy App Service namiesto AKS?", "Ako sa rieši custom domain a TLS?"]
+          },
+          {
+            name: "Azure Functions",
+            type: "Serverless",
+            what: "Serverless compute pre event-driven kód. Funkcia sa spúšťa na trigger, napríklad HTTP request, timer, queue message alebo event.",
+            use: "Používa sa na malé integračné úlohy, automatizáciu, spracovanie eventov a background jobs bez správy serverov.",
+            remember: ["Trigger spúšťa funkciu, binding pripája vstup/výstup.", "Consumption plan škáluje automaticky, ale môže mať cold start.", "Durable Functions riešia orchestráciu dlhších workflow.", "Nie je ideálne pre dlhobežiace monolity."],
+            questions: ["Čo je trigger a binding?", "Čo je cold start?", "Kedy použiť Azure Functions?", "Rozdiel medzi Functions a App Service?"]
+          },
+          {
+            name: "Azure Container Apps",
+            type: "Containers",
+            what: "Managed container platforma nad Kubernetes konceptmi bez potreby spravovať cluster. Podporuje HTTP ingress, autoscaling cez KEDA a revisions.",
+            use: "Používa sa pre microservices, API, workery a event-driven kontajnery, keď nechceš spravovať AKS.",
+            remember: ["Container Apps Environment je izolačné prostredie.", "Revision umožňuje traffic splitting.", "KEDA škáluje podľa eventov.", "Je jednoduchšia než AKS, ale menej flexibilná."],
+            questions: ["Kedy použiť Container Apps namiesto AKS?", "Čo je revision?", "Ako funguje autoscaling cez KEDA?", "Ako sa rieši ingress?"]
+          },
+          {
+            name: "Azure Kubernetes Service",
+            type: "Kubernetes",
+            what: "Managed Kubernetes cluster v Azure. Azure spravuje control plane, ty riešiš node pools, workloady, networking, security a add-ons.",
+            use: "Používa sa pre kontajnerové microservices, komplexné deploymenty, autoscaling a cloud-native aplikácie.",
+            remember: ["Node pool je skupina worker nodes.", "AKS môže používať Azure CNI alebo kubenet.", "Ingress Controller rieši HTTP/S vstup.", "Integrácia s ACR, Entra ID, Monitor a Key Vault je častá."],
+            questions: ["Čo spravuje Azure v AKS a čo spravuješ ty?", "Rozdiel medzi podom, deploymentom a service?", "Ako pripojíš AKS k ACR?", "Ako by si troubleshootoval CrashLoopBackOff?"]
+          },
+          {
+            name: "Azure Container Registry",
+            type: "Container registry",
+            what: "Private registry pre Docker/OCI images a Helm charts. Slúži ako miesto, odkiaľ AKS, Container Apps alebo pipelines ťahajú images.",
+            use: "Používa sa v CI/CD flow: build image, push do ACR, deploy do runtime prostredia.",
+            remember: ["Podporuje private registry.", "AKS môže mať pull access cez managed identity.", "Image tag musí byť riadený, napríklad commit SHA.", "ACR Tasks vedia buildovať images."],
+            questions: ["Načo je container registry?", "Ako zabezpečíš pull image z AKS?", "Prečo nepoužívať stále tag latest?", "Čo je immutable image tag?"]
+          },
+          {
+            name: "Storage Account",
+            type: "Storage",
+            what: "Základná Azure storage služba pre Blob, File, Queue a Table storage. Rieši dátové objekty, súbory, správy a jednoduché NoSQL tabuľky.",
+            use: "Používa sa na statické súbory, backupy, logy, data lake, file shares, queue-based integrácie a všeobecný object storage.",
+            remember: ["Blob je object storage.", "Azure Files je SMB/NFS file share.", "Queue storage je jednoduchá message queue.", "Access tiers: Hot, Cool, Archive.", "SAS token dáva časovo obmedzený prístup."],
+            questions: ["Rozdiel medzi Blob a Azure Files?", "Čo je SAS token?", "Ako zakážeš verejný prístup?", "Kedy použiť Hot vs Archive tier?"]
+          },
+          {
+            name: "Azure Key Vault",
+            type: "Secrets",
+            what: "Služba na bezpečné uloženie secrets, keys a certificates. Integruje sa s managed identities a auditovaním prístupu.",
+            use: "Používa sa na connection strings, API keys, certifikáty a encryption keys bez ukladania tajomstiev do kódu alebo pipeline premenných v plain texte.",
+            remember: ["Secrets sú hodnoty, keys sú kryptografické kľúče, certificates sú certifikáty.", "Access môže byť cez RBAC alebo access policies.", "Soft delete a purge protection chránia pred nechceným zmazaním.", "Aplikácia pristupuje ideálne cez managed identity."],
+            questions: ["Prečo neukladať secrets do Git repozitára?", "Ako aplikácia bezpečne číta secret z Key Vaultu?", "Rozdiel medzi secret a key?", "Čo je purge protection?"]
+          },
+          {
+            name: "Azure Monitor / Log Analytics / Application Insights",
+            type: "Monitoring",
+            what: "Azure Monitor zbiera metriky a logy. Log Analytics umožňuje KQL dotazy. Application Insights monitoruje aplikácie, requesty, dependencies a exceptions.",
+            use: "Používa sa na observability, alerty, troubleshooting, performance analýzu a audit.",
+            remember: ["Metrics sú číselné časové rady.", "Logs sú detailné udalosti a záznamy.", "KQL je query jazyk pre logy.", "Alert môže reagovať na metriku alebo log query."],
+            questions: ["Rozdiel medzi metrikou a logom?", "Načo je Application Insights?", "Čo je KQL?", "Ako by si riešil incident s vysokou latenciou API?"]
+          },
+          {
+            name: "Service Bus / Event Grid / Event Hubs",
+            type: "Messaging",
+            what: "Service Bus je enterprise message broker s queues/topics. Event Grid je event routing služba. Event Hubs je high-throughput streaming ingestion služba.",
+            use: "Service Bus pre spoľahlivé správy a decoupling. Event Grid pre reakciu na udalosti. Event Hubs pre veľké množstvo telemetry alebo stream dát.",
+            remember: ["Queue = jeden konzument správy.", "Topic/subscription = publish-subscribe.", "Event Grid doručuje udalosti.", "Event Hubs je podobný stream ingestion systému."],
+            questions: ["Rozdiel medzi Service Bus a Event Grid?", "Kedy použiť topic namiesto queue?", "Načo je dead-letter queue?", "Kedy použiť Event Hubs?"]
+          },
+          {
+            name: "Azure API Management",
+            type: "API gateway",
+            what: "Managed API gateway na publikovanie, zabezpečenie, transformáciu a monitorovanie API. Podporuje policies, rate limiting, subscriptions a developer portal.",
+            use: "Používa sa ako vstupná vrstva pred backend API, keď treba jednotnú autentifikáciu, throttling, verziovanie a dokumentáciu API.",
+            remember: ["Policy vie meniť request/response.", "Rate limit chráni backend.", "APIM nie je backend aplikácia.", "Vie byť public alebo internal."],
+            questions: ["Načo je API gateway?", "Čo je rate limiting?", "Ako by si schoval backend API pred priamym internetom?", "Čo sú APIM policies?"]
+          },
+          {
+            name: "Azure DevOps / Pipelines",
+            type: "CI/CD",
+            what: "Platforma pre repos, boards, pipelines, artifacts a test plans. Azure Pipelines automatizuje build, test a deploy.",
+            use: "Používa sa na CI/CD pre aplikácie aj infraštruktúru. YAML pipeline definuje kroky build/test/deploy ako kód.",
+            remember: ["Pipeline agent vykonáva joby.", "Stage môže reprezentovať dev/test/prod.", "Service connection dáva pipeline prístup do cloudu.", "Secrets patria do variable groups, Key Vaultu alebo secure storage."],
+            questions: ["Čo je rozdiel medzi CI a CD?", "Čo je service connection?", "Ako by si deployoval Terraform cez pipeline?", "Ako ochrániť secrets v pipeline?"]
+          }
+        ]
+      },
+      {
+        group: "AWS",
+        items: [
+          {
+            name: "IAM",
+            type: "Identity",
+            what: "Identity and Access Management riadi users, groups, roles, policies a permissions v AWS. Je základ bezpečnosti každého AWS účtu.",
+            use: "Používa sa na prideľovanie oprávnení ľuďom, aplikáciám, EC2 instances, Lambdám alebo CI/CD pipeline.",
+            remember: ["Policy je JSON dokument s Allow/Deny.", "Role sa assumuje a používa dočasné credentials.", "Explicit Deny má prednosť.", "Root account sa nemá používať na bežnú prácu."],
+            questions: ["Rozdiel medzi IAM user a IAM role?", "Čo je least privilege?", "Ako funguje AssumeRole?", "Prečo je root account rizikový?"]
+          },
+          {
+            name: "AWS Organizations / Accounts",
+            type: "Governance",
+            what: "Služba na správu viacerých AWS účtov. Umožňuje organizational units, consolidated billing a Service Control Policies.",
+            use: "Používa sa na oddelenie dev/test/prod, tímov, bezpečnostných účtov a centrálne pravidlá v enterprise prostredí.",
+            remember: ["Account je silná isolation boundary.", "SCP obmedzuje maximálne povolené oprávnenia.", "Management account treba chrániť.", "Multi-account stratégia je bežný enterprise pattern."],
+            questions: ["Prečo používať viac AWS účtov?", "Čo je SCP?", "Rozdiel medzi IAM policy a SCP?", "Ako by si oddelil produkciu od developmentu?"]
+          },
+          {
+            name: "VPC",
+            type: "Networking",
+            what: "Virtual Private Cloud je izolovaná virtuálna sieť v AWS. Obsahuje CIDR, subnets, route tables, gateways, endpoints a bezpečnostné pravidlá.",
+            use: "Používa sa na sieťovú izoláciu workloadov a riadenie komunikácie medzi EC2, RDS, EKS, internetom a on-premise sieťou.",
+            remember: ["Subnet je viazaný na Availability Zone.", "Public subnet má route na Internet Gateway.", "Private subnet nemá priamy inbound internet access.", "CIDR sa plánuje vopred."],
+            questions: ["Rozdiel medzi public a private subnet?", "Čo je route table?", "Ako dostane private subnet outbound internet?", "Prečo riešiť overlapping CIDR?"]
+          },
+          {
+            name: "Subnets / NAT Gateway / Internet Gateway",
+            type: "Networking",
+            what: "Subnets delia VPC podľa AZ a účelu. Route tables určujú smerovanie. Internet Gateway umožňuje internet access pre public subnety. NAT Gateway dáva private subnetom outbound internet.",
+            use: "Používa sa pre typickú architektúru: public subnet pre load balancer, private subnet pre aplikácie a databázy.",
+            remember: ["NAT Gateway je pre outbound z private subnetu.", "Internet Gateway umožní verejný internet routing.", "Public IP sama nestačí bez route.", "Route 0.0.0.0/0 určuje default route."],
+            questions: ["Ako nastavíš private EC2, aby vedela sťahovať updates z internetu?", "Načo je NAT Gateway?", "Čo robí Internet Gateway?", "Prečo dať databázu do private subnetu?"]
+          },
+          {
+            name: "Security Groups / NACL",
+            type: "Network security",
+            what: "Security Group je stateful firewall na úrovni ENI/instance. NACL je stateless firewall na úrovni subnetu.",
+            use: "Security Groups sa používajú najčastejšie na aplikačné pravidlá. NACL slúži ako dodatočná subnet-level ochrana.",
+            remember: ["Security Group je stateful.", "NACL je stateless a potrebuje inbound aj outbound pravidlá.", "Security Groups nemajú explicit deny, iba allow.", "NACL pravidlá majú čísla a vyhodnocujú sa v poradí."],
+            questions: ["Rozdiel medzi Security Group a NACL?", "Čo znamená stateful?", "Prečo NACL potrebuje ephemeral ports?", "Ako povolíš HTTP iba z load balancera?"]
+          },
+          {
+            name: "Route 53",
+            type: "DNS",
+            what: "Managed DNS služba AWS. Rieši hosted zones, DNS záznamy, health checks a routing policies.",
+            use: "Používa sa na správu domén, smerovanie trafficu na ALB, CloudFront, S3 static hosting alebo failover medzi regiónmi.",
+            remember: ["Hosted zone obsahuje DNS záznamy.", "Alias record smeruje na AWS resource bez klasického CNAME obmedzenia na root doméne.", "TTL ovplyvňuje caching.", "Routing policies: simple, weighted, latency, failover, geolocation."],
+            questions: ["Čo je hosted zone?", "Rozdiel medzi A, CNAME a Alias record?", "Ako spravíš DNS failover?", "Čo znamená TTL?"]
+          },
+          {
+            name: "CloudFront",
+            type: "CDN",
+            what: "Content Delivery Network, ktorá cacheuje obsah na edge locations. Vie TLS, WAF integráciu, signed URLs a smerovanie na origins ako S3 alebo ALB.",
+            use: "Používa sa na zrýchlenie webu, distribúciu statických súborov, ochranu originu a globálnu dostupnosť obsahu.",
+            remember: ["Origin je zdroj obsahu.", "Cache behavior určuje pravidlá cache a routing.", "Invalidation zmaže cacheovaný objekt.", "CloudFront je globálna služba."],
+            questions: ["Načo je CDN?", "Čo je origin?", "Kedy robiť cache invalidation?", "Ako ochrániš S3 bucket za CloudFrontom?"]
+          },
+          {
+            name: "ELB / ALB / NLB",
+            type: "Load balancing",
+            what: "Elastic Load Balancing rozdeľuje traffic medzi targety. ALB je Layer 7 pre HTTP/S. NLB je Layer 4 pre TCP/UDP a vysoký výkon.",
+            use: "ALB pre web aplikácie, path/host routing a TLS termination. NLB pre nízku latenciu, TCP traffic alebo statické IP požiadavky.",
+            remember: ["Target group obsahuje backendy.", "Health check určuje zdravie targetov.", "ALB vie path-based routing.", "NLB pracuje na L4."],
+            questions: ["Rozdiel medzi ALB a NLB?", "Čo je target group?", "Ako funguje health check?", "Kde by si ukončil TLS?"]
+          },
+          {
+            name: "EC2",
+            type: "Compute",
+            what: "Elastic Compute Cloud poskytuje virtuálne servery v AWS. Spravuješ OS, patching, runtime, sieť a bezpečnosť.",
+            use: "Používa sa pre legacy workloady, custom servery, aplikácie mimo PaaS/serverless modelu alebo keď potrebuješ plnú kontrolu nad OS.",
+            remember: ["AMI je image pre instance.", "Instance type určuje CPU/RAM/network.", "User data spustí bootstrap script.", "Instance profile priradí IAM role EC2 instance."],
+            questions: ["Čo je AMI?", "Ako dáš EC2 bezpečný prístup do S3 bez access keys?", "Čo je user data?", "Ako zabezpečíš HA aplikácie na EC2?"]
+          },
+          {
+            name: "Auto Scaling Group",
+            type: "Scaling",
+            what: "Skupina EC2 instances, ktorá udržiava desired capacity a vie škálovať podľa pravidiel alebo metrík.",
+            use: "Používa sa na horizontálne škálovanie a samoopravu EC2 fleetu za load balancerom.",
+            remember: ["Launch template definuje konfiguráciu instance.", "Desired/min/max capacity riadi počet instances.", "Scaling policy môže reagovať na CPU alebo custom metric.", "ASG nahrádza nezdravé instances."],
+            questions: ["Čo je desired capacity?", "Ako ASG reaguje na zlyhanú inštanciu?", "Čo je launch template?", "Rozdiel medzi vertikálnym a horizontálnym scalingom?"]
+          },
+          {
+            name: "S3",
+            type: "Object storage",
+            what: "Simple Storage Service je object storage pre súbory, backupy, statický hosting, logy a dátové jazerá.",
+            use: "Používa sa na ukladanie objektov cez bucket/key model. Veľmi časté použitie v CI/CD, data pipeline, backupoch a web distribúcii.",
+            remember: ["Bucket je kontajner, object je súbor s key.", "Versioning chráni pred prepísaním/zmazaním.", "Lifecycle policy presúva alebo maže objekty.", "Bucket policy a IAM policy riadia prístup."],
+            questions: ["Rozdiel medzi S3 a EBS?", "Ako zakážeš public access?", "Čo je lifecycle policy?", "Načo je versioning?"]
+          },
+          {
+            name: "EBS / EFS / FSx",
+            type: "Storage",
+            what: "EBS je block storage pre EC2. EFS je managed NFS file system pre viac klientov. FSx poskytuje managed file systémy ako Windows File Server alebo Lustre.",
+            use: "EBS pre disk jednej EC2. EFS pre zdieľané súbory medzi viacerými instanciami. FSx pre špecifické enterprise alebo high-performance file workloady.",
+            remember: ["EBS je typicky pripojený k jednej instance v jednej AZ.", "EFS je regionálna managed NFS služba.", "Snapshoty sa používajú na backup EBS.", "File, block a object storage riešia iné potreby."],
+            questions: ["Rozdiel medzi EBS, EFS a S3?", "Kedy použiť EFS?", "Čo je EBS snapshot?", "Prečo EBS nie je ideálny ako zdieľaný file system?"]
+          },
+          {
+            name: "Lambda",
+            type: "Serverless",
+            what: "Serverless compute na spúšťanie funkcií podľa eventov bez správy serverov. Spúšťa sa napríklad cez API Gateway, S3 event, EventBridge alebo SQS.",
+            use: "Používa sa pre event-driven automatizáciu, API backendy, file processing, scheduled jobs a integračnú logiku.",
+            remember: ["Platí sa za invokácie a trvanie.", "Cold start môže ovplyvniť latenciu.", "Execution role dáva oprávnenia funkcii.", "Timeout a memory treba nastaviť podľa workloadu."],
+            questions: ["Čo je cold start?", "Ako Lambda získa právo čítať S3?", "Kedy Lambda nie je vhodná?", "Ako by si troubleshootoval timeout?"]
+          },
+          {
+            name: "ECS / Fargate",
+            type: "Containers",
+            what: "Elastic Container Service je AWS orchestrátor kontajnerov. Fargate je serverless compute pre ECS/EKS, kde nespravuješ EC2 nody.",
+            use: "Používa sa na beh kontajnerov bez plného Kubernetes komplexu. Fargate zjednodušuje prevádzku, ECS na EC2 dáva viac kontroly.",
+            remember: ["Task definition opisuje container, CPU, memory, env a porty.", "Service udržiava počet bežiacich taskov.", "Cluster je logický kontajner pre tasks/services.", "Fargate odstraňuje správu serverov."],
+            questions: ["Rozdiel medzi ECS a EKS?", "Čo je task definition?", "Kedy použiť Fargate?", "Ako ECS service spolupracuje s ALB?"]
+          },
+          {
+            name: "EKS",
+            type: "Kubernetes",
+            what: "Elastic Kubernetes Service je managed Kubernetes v AWS. AWS spravuje control plane, ty riešiš worker nodes, add-ons, networking a workloady.",
+            use: "Používa sa, keď tím potrebuje Kubernetes API, Helm, operators, GitOps a portable cloud-native platformu.",
+            remember: ["Node group môže byť managed alebo self-managed.", "IRSA prepája Kubernetes service account s IAM role.", "EKS používa VPC CNI plugin.", "Ingress často rieši AWS Load Balancer Controller."],
+            questions: ["Čo je IRSA?", "Čo spravuje AWS v EKS?", "Ako sa vytvorí ALB pre Kubernetes ingress?", "Rozdiel medzi ECS a EKS?"]
+          },
+          {
+            name: "ECR",
+            type: "Container registry",
+            what: "Elastic Container Registry je private registry pre container images. Integruje sa s ECS, EKS, Lambda a IAM.",
+            use: "Používa sa v CI/CD pipeline na uloženie image po builde a následný deployment do container runtime.",
+            remember: ["Image push/pull sa riadi IAM oprávneniami.", "Tagovanie cez commit SHA zlepšuje traceability.", "Lifecycle rules čistia staré images.", "ECR môže skenovať images na vulnerabilities."],
+            questions: ["Načo je ECR?", "Ako pipeline pushne image do ECR?", "Prečo nepoužívať len tag latest?", "Ako čistiť staré images?"]
+          },
+          {
+            name: "RDS / Aurora",
+            type: "Database",
+            what: "RDS je managed relačná databázová služba pre engines ako PostgreSQL, MySQL, MariaDB, SQL Server a Oracle. Aurora je AWS optimalizovaná kompatibilná databáza pre MySQL/PostgreSQL.",
+            use: "Používa sa, keď chceš relačnú databázu bez správy OS, patchingu a väčšiny infraštruktúry.",
+            remember: ["Multi-AZ rieši high availability.", "Read replica zlepšuje read scaling.", "Backup a point-in-time restore sú dôležité.", "Security Group a subnet group riadia sieť."],
+            questions: ["Rozdiel medzi RDS a EC2 databázou?", "Čo je Multi-AZ?", "Rozdiel medzi read replica a Multi-AZ?", "Ako zabezpečíš RDS v private subnetoch?"]
+          },
+          {
+            name: "DynamoDB",
+            type: "NoSQL database",
+            what: "Managed NoSQL key-value/document databáza s vysokou škálovateľnosťou a nízkou latenciou.",
+            use: "Používa sa pre serverless aplikácie, session store, event data, high-scale key-value prístup a jednoduché NoSQL modely.",
+            remember: ["Partition key určuje rozloženie dát.", "Sort key umožňuje zoradenie v rámci partition.", "GSI/LSI sú indexy.", "On-demand alebo provisioned capacity riadi kapacitu."],
+            questions: ["Čo je partition key?", "Kedy DynamoDB namiesto RDS?", "Čo je GSI?", "Ako sa vyhnúť hot partition?"]
+          },
+          {
+            name: "SQS / SNS / EventBridge",
+            type: "Messaging",
+            what: "SQS je message queue. SNS je pub/sub notification služba. EventBridge je event bus na routing udalostí medzi službami a aplikáciami.",
+            use: "Používa sa na decoupling, retry mechanizmy, event-driven architektúru a asynchrónnu komunikáciu.",
+            remember: ["SQS pull model.", "SNS pushuje správy subscriberom.", "EventBridge routuje eventy podľa rules.", "DLQ pomáha spracovať zlyhané správy."],
+            questions: ["Rozdiel medzi SQS a SNS?", "Čo je dead-letter queue?", "Kedy použiť EventBridge?", "Ako zabrániť strate správ?"]
+          },
+          {
+            name: "API Gateway",
+            type: "API gateway",
+            what: "Managed vstupná vrstva pre REST, HTTP a WebSocket API. Integruje sa s Lambda, private integrations a ďalšími backendmi.",
+            use: "Používa sa na publikovanie API s autentifikáciou, throttlingom, request transformáciou a metrikami.",
+            remember: ["Stage reprezentuje deployment verziu/prostredie.", "Authorizer rieši autentifikáciu/autorizáciu.", "Throttling chráni backend.", "Často sa kombinuje s Lambda."],
+            questions: ["Načo je API Gateway?", "Ako ochrániš API pred nadmerným trafficom?", "Čo je Lambda authorizer?", "Rozdiel medzi REST API a HTTP API?"]
+          },
+          {
+            name: "CloudWatch / CloudTrail / AWS Config",
+            type: "Observability / Audit",
+            what: "CloudWatch zbiera metriky, logy a alerty. CloudTrail auditne API volania v AWS účte. AWS Config sleduje konfiguráciu resources a compliance.",
+            use: "Používa sa na monitoring, audit, incident investigation a compliance reporting.",
+            remember: ["CloudWatch = runtime monitoring.", "CloudTrail = kto čo zavolal v AWS API.", "Config = aký bol stav konfigurácie a či spĺňa pravidlá.", "Log retention treba nastaviť."],
+            questions: ["Rozdiel medzi CloudWatch a CloudTrail?", "Ako zistíš kto zmazal resource?", "Načo je AWS Config?", "Ako nastavíš alert na vysoké CPU?"]
+          },
+          {
+            name: "Systems Manager",
+            type: "Operations",
+            what: "AWS Systems Manager pomáha spravovať instances, spúšťať commands, patchovať, ukladať parametre a pristupovať cez Session Manager.",
+            use: "Používa sa na bezpečnú správu EC2 bez SSH/RDP otvoreného do internetu, patch management a automatizáciu operácií.",
+            remember: ["SSM Agent musí bežať na instance.", "Instance potrebuje IAM role.", "Session Manager nahrádza priamy SSH/RDP v mnohých scenároch.", "Parameter Store vie držať konfiguráciu a secrets."],
+            questions: ["Ako sa pripojíš na EC2 bez verejnej IP?", "Čo je Session Manager?", "Aké podmienky potrebuje EC2 pre SSM?", "Rozdiel medzi Parameter Store a Secrets Manager?"]
+          },
+          {
+            name: "Secrets Manager / Parameter Store / KMS",
+            type: "Secrets / Encryption",
+            what: "Secrets Manager spravuje tajomstvá a rotáciu. Parameter Store drží konfiguračné parametre a môže držať secure strings. KMS spravuje šifrovacie kľúče.",
+            use: "Používa sa na bezpečné uloženie hesiel, connection strings, API keys a encryption keys bez uloženia v kóde.",
+            remember: ["KMS key šifruje dáta alebo data keys.", "Secrets Manager podporuje rotáciu secrets.", "IAM policy riadi prístup k secretu.", "Nikdy necommitovať secrets do Git."],
+            questions: ["Kedy Secrets Manager a kedy Parameter Store?", "Čo robí KMS?", "Ako aplikácia bezpečne číta secret?", "Ako riešiť rotáciu hesiel?"]
+          }
+        ]
+      },
+      {
+        group: "CI/CD",
+        items: [
+          {
+            name: "CI vs CD",
+            type: "Pipeline basics",
+            what: "CI znamená Continuous Integration: pravidelný build, test a integrácia zmien. CD môže znamenať Continuous Delivery alebo Continuous Deployment.",
+            use: "CI znižuje riziko merge problémov. CD zautomatizuje release proces a skracuje čas od commitu po produkciu.",
+            remember: ["Continuous Delivery pripraví release, ale nasadenie do produkcie môže vyžadovať manuálny approval.", "Continuous Deployment nasadzuje automaticky po splnení kontrol.", "Pipeline by mala byť opakovateľná.", "Každý build má mať traceable artifact."],
+            questions: ["Rozdiel medzi Continuous Delivery a Continuous Deployment?", "Čo by mala robiť CI pipeline?", "Prečo je dôležitý artifact?", "Ako zabrániť rozbitiu main branch?"]
+          },
+          {
+            name: "Pipeline stages",
+            type: "Pipeline design",
+            what: "Typické stages sú checkout, build, unit tests, static analysis, package, security scan, publish artifact, deploy dev/test/prod a smoke tests.",
+            use: "Pomáha oddeliť kroky, nastaviť approvals, retry, rollback a jasný release flow.",
+            remember: ["Fail fast šetrí čas.", "Testy majú byť čo najskôr.", "Secrets nesmú byť v logoch.", "Produkčný deploy má mať audit trail."],
+            questions: ["Ako by vyzerala pipeline pre web API?", "Kde by si dal security scan?", "Ako riešiť approvals do produkcie?", "Ako uchovať logy z deploymentu?"]
+          },
+          {
+            name: "Deployment strategies",
+            type: "Release",
+            what: "Bežné stratégie sú rolling update, blue/green, canary a feature flags.",
+            use: "Používa sa na zníženie rizika pri nasadzovaní. Canary púšťa novú verziu malej časti používateľov, blue/green drží dve prostredia.",
+            remember: ["Rolling mení instances postupne.", "Blue/green umožňuje rýchly návrat prepnutím trafficu.", "Canary vyžaduje dobrý monitoring.", "Feature flags oddelia deploy od release."],
+            questions: ["Rozdiel medzi blue/green a canary?", "Ako by si spravil rollback?", "Čo potrebuješ monitorovať pri canary?", "Prečo používať feature flags?"]
+          },
+          {
+            name: "Pipeline security",
+            type: "Security",
+            what: "Zabezpečenie pipeline zahŕňa ochranu secrets, minimálne oprávnenia, schvaľovanie, audit, dependency scan, image scan a podpisovanie artifactov.",
+            use: "Pipeline často má vysoké oprávnenia, preto je kritickým bezpečnostným bodom.",
+            remember: ["Používaj short-lived credentials alebo federáciu identity.", "Service connection má mať minimálne oprávnenia.", "Pull request z neznámeho fork repa nesmie automaticky dostať secrets.", "Artifact by mal byť immutable."],
+            questions: ["Ako chrániš secrets v CI/CD?", "Prečo nepoužívať dlhodobé access keys?", "Čo je supply chain security?", "Ako obmedziť oprávnenia pipeline?"]
+          }
+        ]
+      },
+      {
+        group: "Terraform",
+        desc: "Infrastructure as Code a Terraform pojmy, ktoré treba vedieť vysvetliť.",
+        items: [
+          {
+            name: "Terraform core",
+            type: "IaC",
+            what: "Terraform je Infrastructure as Code nástroj. Deklaratívne opisuješ infraštruktúru v HCL a Terraform vytvorí alebo zmení resources cez providery.",
+            use: "Používa sa na opakovateľné a auditovateľné vytváranie infraštruktúry v Azure, AWS, Kubernetes a ďalších platformách.",
+            remember: ["Declarative znamená opis cieľového stavu.", "Provider komunikuje s API cloudu.", "Resource je spravovaný objekt.", "Data source číta existujúce dáta."],
+            questions: ["Čo je Infrastructure as Code?", "Čo robí provider?", "Rozdiel medzi resource a data source?", "Prečo je Terraform lepší než manuálne klikanie v portáli?"]
+          },
+          {
+            name: "State",
+            type: "Terraform state",
+            what: "State je mapovanie medzi Terraform konfiguráciou a reálnymi resources. Terraform podľa neho vie, čo existuje a čo treba zmeniť.",
+            use: "Bez state by Terraform nevedel spoľahlivo plánovať zmeny. V tíme sa používa remote backend so zamykaním.",
+            remember: ["State môže obsahovať citlivé hodnoty.", "Remote backend umožní tímovú prácu.", "State locking bráni paralelným apply.", "State nikdy neupravovať ručne bez dôvodu."],
+            questions: ["Načo je Terraform state?", "Prečo nepoužívať lokálny state v tíme?", "Čo je state locking?", "Čo je drift?"]
+          },
+          {
+            name: "Plan / Apply / Destroy / Import",
+            type: "Workflow",
+            what: "terraform plan ukáže navrhované zmeny. terraform apply ich vykoná. destroy odstráni resources. import pripojí existujúci resource do state.",
+            use: "Typický bezpečný flow je fmt, validate, plan, review, apply. V pipeline sa plan často schvaľuje pred apply.",
+            remember: ["Plan nie je garancia, že apply prejde, lebo realita sa môže zmeniť.", "Import nevygeneruje vždy ideálny kód.", "Destroy je nebezpečný v produkcii.", "Plan output treba kontrolovať."],
+            questions: ["Čo robí terraform plan?", "Kedy použiť import?", "Ako by si nastavil Terraform pipeline?", "Ako zabrániť nechcenému destroy?"]
+          },
+          {
+            name: "Modules, variables, outputs",
+            type: "Reusable code",
+            what: "Module je znovupoužiteľný Terraform kód. Variables parametrizujú vstup. Outputs vracajú hodnoty pre používateľa alebo iný modul.",
+            use: "Používa sa na štandardizáciu infraštruktúry a zníženie duplikácie, napríklad modul pre VNet/VPC alebo AKS/EKS.",
+            remember: ["Root module je aktuálny projekt.", "Child module je volaný modul.", "Versionovanie modulov je dôležité.", "Premenné majú mať typy a validácie."],
+            questions: ["Prečo používať moduly?", "Ako by si navrhol modul pre network?", "Čo sú outputs?", "Ako riešiť verzie modulov?"]
+          },
+          {
+            name: "Workspaces, environments, drift",
+            type: "Operations",
+            what: "Workspaces držia viac state súborov pre rovnakú konfiguráciu. Environments možno riešiť workspace, samostatnými adresármi alebo samostatnými pipeline/state.",
+            use: "Používa sa na oddelenie dev/test/prod, ale v praxi sa často preferuje jasná separácia state a konfigurácie podľa prostredia.",
+            remember: ["Drift je rozdiel medzi kódom/state a realitou.", "terraform refresh/plan pomáha drift odhaliť.", "Workspace nie je bezpečnostná boundary.", "Produkčný state treba chrániť."],
+            questions: ["Čo je drift?", "Ako riešiť dev/test/prod v Terraform?", "Kedy sú workspaces vhodné?", "Ako riešiť manuálnu zmenu resource mimo Terraformu?"]
+          }
+        ]
+      },
+      {
+        group: "Kubernetes",
+        items: [
+          {
+            name: "Cluster, node, pod",
+            type: "Core",
+            what: "Cluster je Kubernetes prostredie. Node je worker server. Pod je najmenšia deploy jednotka a obsahuje jeden alebo viac kontajnerov.",
+            use: "Používa sa na orchestration kontajnerov, scheduling, self-healing, service discovery a rolling deploymenty.",
+            remember: ["Pod má vlastnú IP.", "Kontajnery v pode zdieľajú network namespace.", "Pod je dočasný, preto sa nenasadzuje ručne pre produkciu.", "Control plane riadi stav clusteru."],
+            questions: ["Čo je pod?", "Rozdiel medzi podom a kontajnerom?", "Čo robí control plane?", "Prečo pod nie je vhodný ako samostatný produkčný deployment?"]
+          },
+          {
+            name: "Deployment, ReplicaSet, StatefulSet, DaemonSet",
+            type: "Workloads",
+            what: "Deployment spravuje stateless aplikácie a ReplicaSet. StatefulSet rieši stateful aplikácie so stabilnou identitou. DaemonSet spustí pod na každom node.",
+            use: "Deployment pre web/API. StatefulSet pre databázy alebo systémy s identitou. DaemonSet pre agenty, log collectory a node komponenty.",
+            remember: ["Deployment umožňuje rolling update a rollback.", "StatefulSet dáva stabilné meno a storage.", "DaemonSet beží typicky na každom node.", "ReplicaSet udržiava počet replík."],
+            questions: ["Rozdiel medzi Deployment a StatefulSet?", "Načo je DaemonSet?", "Ako spravíš rollback deploymentu?", "Čo je ReplicaSet?"]
+          },
+          {
+            name: "Service, Ingress, DNS",
+            type: "Networking",
+            what: "Service dáva stabilný endpoint pre pody. Ingress vystavuje HTTP/S služby mimo cluster cez ingress controller. Kubernetes DNS umožňuje service discovery.",
+            use: "Používa sa, lebo pody sú dynamické a ich IP sa mení. Service a DNS dávajú stabilnú komunikáciu.",
+            remember: ["ClusterIP je interná služba.", "NodePort vystaví port na node.", "LoadBalancer vytvorí cloud load balancer.", "Ingress potrebuje ingress controller."],
+            questions: ["Rozdiel medzi Service a Ingress?", "Typy Kubernetes Service?", "Prečo potrebujem ingress controller?", "Ako funguje service discovery?"]
+          },
+          {
+            name: "ConfigMap, Secret, RBAC",
+            type: "Configuration / Security",
+            what: "ConfigMap drží nekritickú konfiguráciu. Secret drží citlivé hodnoty. RBAC určuje, kto alebo čo môže robiť akcie v Kubernetes API.",
+            use: "Používa sa na oddelenie konfigurácie od image a na riadenie prístupov pre používateľov, service accounts a automaty.",
+            remember: ["Secret nie je automaticky silné bezpečnostné riešenie bez správneho šifrovania a prístupov.", "ServiceAccount je identita workloadu v clusteri.", "Role/ClusterRole definujú práva.", "RoleBinding/ClusterRoleBinding práva priraďujú."],
+            questions: ["Rozdiel medzi ConfigMap a Secret?", "Čo je ServiceAccount?", "Ako funguje Kubernetes RBAC?", "Prečo nedávať cluster-admin všetkému?"]
+          },
+          {
+            name: "Probes, resources, autoscaling",
+            type: "Reliability",
+            what: "Liveness, readiness a startup probes sledujú stav aplikácie. Requests/limits definujú CPU/RAM potreby. HPA škáluje počet replík podľa metrík.",
+            use: "Používa sa na stabilitu deploymentov, správny routing trafficu a efektívne využitie clusteru.",
+            remember: ["Readiness určuje, či pod dostáva traffic.", "Liveness reštartuje zaseknutý kontajner.", "Requests používa scheduler.", "Limits obmedzujú maximum."],
+            questions: ["Rozdiel medzi liveness a readiness probe?", "Čo sa stane pri prekročení memory limitu?", "Načo sú resource requests?", "Ako funguje HPA?"]
+          },
+          {
+            name: "Troubleshooting commands",
+            type: "Operations",
+            what: "Základné príkazy: kubectl get pods -A, kubectl describe pod, kubectl logs, kubectl exec, kubectl get events, kubectl rollout status.",
+            use: "Používa sa pri incidentoch, zlyhaných deploymentoch, networking problémoch alebo pri kontrole stavu clusteru.",
+            remember: ["Describe ukáže events a dôvod zlyhania.", "Logs ukazujú výstup kontajnera.", "Events sú často najrýchlejšia stopa.", "CrashLoopBackOff znamená opakované pády kontajnera."],
+            questions: ["Ako riešiš ImagePullBackOff?", "Ako riešiš CrashLoopBackOff?", "Ako zistíš, prečo pod nie je scheduled?", "Ktoré kubectl príkazy používaš najčastejšie?"]
+          }
+        ]
+      },
+      {
+        group: "Docker",
+        items: [
+          {
+            name: "Image vs container",
+            type: "Basics",
+            what: "Image je immutable šablóna s filesystem layers a metadátami. Container je bežiaca inštancia image.",
+            use: "Docker balí aplikáciu s runtime závislosťami, aby bežala rovnako na dev, test aj prod prostredí.",
+            remember: ["Image sa builduje, container sa spúšťa.", "Layer cache zrýchľuje build.", "Container by mal byť disposable.", "Logy píš do stdout/stderr."],
+            questions: ["Rozdiel medzi image a container?", "Prečo sú kontajnery vhodné pre CI/CD?", "Čo znamená immutable image?", "Ako sa pozerajú logy kontajnera?"]
+          },
+          {
+            name: "Dockerfile",
+            type: "Build",
+            what: "Dockerfile je recept na vytvorenie image. Obsahuje inštrukcie ako FROM, WORKDIR, COPY, RUN, ENV, EXPOSE, CMD a ENTRYPOINT.",
+            use: "Používa sa na opakovateľný build aplikačného image v CI/CD pipeline.",
+            remember: ["FROM určuje base image.", "RUN sa vykoná pri builde.", "CMD/ENTRYPOINT sa týka štartu kontajnera.", "Multi-stage build zmenší finálny image."],
+            questions: ["Rozdiel medzi RUN a CMD?", "Načo je multi-stage build?", "Ako zmenšiť Docker image?", "Prečo nepúšťať kontajner ako root?"]
+          },
+          {
+            name: "Volumes, networks, registry",
+            type: "Runtime",
+            what: "Volume ukladá dáta mimo lifecycle kontajnera. Docker network umožňuje komunikáciu kontajnerov. Registry ukladá a distribuuje images.",
+            use: "Používa sa na lokálny vývoj, perzistentné dáta, komunikáciu služieb a distribúciu image do prostredí.",
+            remember: ["Bez volume sa dáta v kontajneri ľahko stratia.", "Bridge network je default lokálna sieť.", "Registry môže byť Docker Hub, ACR, ECR alebo iné.", "Image tag má byť jednoznačný."],
+            questions: ["Načo sú Docker volumes?", "Čo je container registry?", "Ako kontajnery komunikujú medzi sebou?", "Prečo je tag latest problematický?"]
+          }
+        ]
+      },
+      {
+        group: "Windows",
+        items: [
+          {
+            name: "Active Directory, DNS, GPO",
+            type: "Windows infrastructure",
+            what: "Active Directory spravuje identity, počítače a doménové politiky. DNS je kritický pre doménu. Group Policy riadi nastavenia používateľov a počítačov.",
+            use: "Používa sa v enterprise Windows prostredí na centralizovanú správu účtov, prístupov a konfigurácie.",
+            remember: ["Domain Controller poskytuje AD DS služby.", "DNS problémy často spôsobujú AD problémy.", "GPO sa aplikuje podľa site/domain/OU poradia.", "Kerberos je bežný auth protokol v doméne."],
+            questions: ["Čo je Domain Controller?", "Prečo je DNS dôležité pre AD?", "Čo je GPO?", "Ako by si troubleshootoval, že sa user nevie prihlásiť do domény?"]
+          },
+          {
+            name: "IIS, Services, Event Viewer",
+            type: "Operations",
+            what: "IIS hostuje web aplikácie na Windows. Services sú background procesy. Event Viewer obsahuje systémové, aplikačné a bezpečnostné logy.",
+            use: "Používa sa pri prevádzke Windows web aplikácií a troubleshooting incidentov.",
+            remember: ["Application Pool izoluje IIS aplikácie.", "Recycle môže dočasne prerušiť aplikáciu.", "Event Viewer je prvé miesto pri Windows chybách.", "Service account musí mať potrebné oprávnenia."],
+            questions: ["Čo je IIS Application Pool?", "Kde hľadáš Windows chyby?", "Ako reštartuješ službu cez PowerShell?", "Čo môže spôsobiť 500 chybu v IIS?"]
+          },
+          {
+            name: "PowerShell, Firewall, NTFS permissions",
+            type: "Admin",
+            what: "PowerShell je automatizačný shell. Windows Firewall riadi sieťový traffic. NTFS permissions riadia prístup k súborom a adresárom.",
+            use: "Používa sa na administráciu, skriptovanie, kontrolu služieb, práce so súbormi a zabezpečenie serverov.",
+            remember: ["Get-Service, Get-EventLog/Get-WinEvent, Test-NetConnection sú časté príkazy.", "NTFS a share permissions sa kombinujú.", "Firewall pravidlá môžu blokovať port aj keď aplikácia beží.", "Run as Administrator rieši elevated oprávnenia."],
+            questions: ["Ako overíš, či je port otvorený?", "Rozdiel medzi NTFS a share permissions?", "Ako vypíšeš služby cez PowerShell?", "Ako zistíš, či firewall blokuje komunikáciu?"]
+          }
+        ]
+      },
+      {
+        group: "Linux",
+        items: [
+          {
+            name: "Filesystem, permissions, users",
+            type: "Basics",
+            what: "Linux filesystem používa hierarchiu od root /. Permissions riadia prístup pre owner, group a others. Users a groups určujú identity procesov a prístupov.",
+            use: "Používa sa pri správe serverov, deploymentoch, troubleshooting aplikácií a zabezpečení súborov.",
+            remember: ["chmod mení permissions.", "chown mení vlastníka.", "sudo spúšťa príkaz s vyššími právami.", "755 a 644 sú časté permission módy."],
+            questions: ["Čo znamená chmod 755?", "Rozdiel medzi owner/group/others?", "Ako zmeníš vlastníka súboru?", "Prečo nepúšťať aplikácie ako root?"]
+          },
+          {
+            name: "systemd, processes, logs",
+            type: "Operations",
+            what: "systemd spravuje služby. Procesy sa sledujú cez ps, top, htop. Logy sú v journalctl alebo v /var/log podľa služby.",
+            use: "Používa sa na štart/stop služieb, kontrolu stavu aplikácií a incident troubleshooting.",
+            remember: ["systemctl status ukáže stav služby.", "journalctl -u service zobrazí logy služby.", "ps aux ukáže procesy.", "kill posiela signál procesu."],
+            questions: ["Ako zistíš, prečo služba neštartuje?", "Ako pozrieš logy systemd služby?", "Čo robí systemctl restart?", "Ako nájdeš proces podľa portu?"]
+          },
+          {
+            name: "Linux networking",
+            type: "Networking",
+            what: "Linux networking zahŕňa IP adresy, routing, DNS, firewall a diagnostiku cez nástroje ako ip, ss, curl, dig, ping a traceroute.",
+            use: "Používa sa pri riešení nedostupnosti aplikácie, DNS problémov, portov a routingu.",
+            remember: ["ss -tulpn ukáže listening porty.", "curl overí HTTP endpoint.", "dig/nslookup overí DNS.", "ip route ukáže routing tabuľku."],
+            questions: ["Ako overíš, či aplikácia počúva na porte?", "Ako troubleshootovať DNS problém?", "Rozdiel medzi ping a curl?", "Ako zistíš default gateway?"]
+          }
+        ]
+      },
+      {
+        group: "Networking",
+        items: [
+          {
+            name: "OSI, TCP/IP, ports",
+            type: "Basics",
+            what: "OSI model popisuje vrstvy siete. V praxi sa často rieši TCP/IP model, IP adresy, porty, TCP/UDP, DNS, HTTP a TLS.",
+            use: "Používa sa na presné rozmýšľanie pri troubleshootingu: je problém DNS, routing, firewall, TLS alebo aplikácia?",
+            remember: ["TCP je connection-oriented.", "UDP je connectionless.", "HTTP beží typicky na 80, HTTPS na 443.", "SSH 22, RDP 3389, DNS 53."],
+            questions: ["Rozdiel medzi TCP a UDP?", "Na akom porte je HTTPS?", "Čo znamená Layer 4 a Layer 7?", "Ako by si debugoval, že web nejde načítať?"]
+          },
+          {
+            name: "DNS",
+            type: "Name resolution",
+            what: "DNS prekladá mená na IP adresy a ďalšie záznamy. Bežné typy záznamov sú A, AAAA, CNAME, MX, TXT a NS.",
+            use: "Používa sa všade, kde aplikácie používajú mená namiesto IP. Zlé DNS často spôsobí výpadok aj keď servery bežia.",
+            remember: ["A záznam smeruje na IPv4.", "CNAME je alias na iné meno.", "TXT sa používa napríklad pre verifikácie a SPF.", "TTL určuje cacheovanie."],
+            questions: ["Rozdiel medzi A a CNAME?", "Čo je TTL?", "Ako overíš DNS záznam?", "Čo sa stane pri zlom DNS cache?"]
+          },
+          {
+            name: "CIDR, subnetting, routing, NAT",
+            type: "IP networking",
+            what: "CIDR určuje rozsah IP adries, subnetting delí sieť, routing rozhoduje kam packet pôjde a NAT prekladá adresy.",
+            use: "Používa sa pri návrhu VPC/VNet, hybrid connectivity, firewalloch a oddelení prostredí.",
+            remember: ["10.0.0.0/24 má 256 adries teoreticky.", "Default route je 0.0.0.0/0.", "Private ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16.", "NAT umožní private hostom outbound internet."],
+            questions: ["Čo znamená /24?", "Prečo sa nesmú prekrývať CIDR rozsahy?", "Čo je default route?", "Načo je NAT?"]
+          },
+          {
+            name: "TLS, VPN, load balancing, firewall",
+            type: "Security / Availability",
+            what: "TLS šifruje komunikáciu, VPN vytvára bezpečný tunel, load balancer rozdeľuje traffic a firewall povoľuje alebo blokuje komunikáciu.",
+            use: "Používa sa na bezpečnosť, dostupnosť a kontrolu trafficu medzi klientmi, aplikáciami a sieťami.",
+            remember: ["TLS certificate musí sedieť na hostname.", "Firewall pravidlá majú smer, zdroj, cieľ, port a protokol.", "Load balancer potrebuje health check.", "VPN môže byť site-to-site alebo client-to-site."],
+            questions: ["Čo je TLS handshake?", "Čo je health check?", "Rozdiel medzi L4 a L7 load balancingom?", "Ako zistíš, či firewall blokuje port?"]
+          }
+        ]
+      },
+      {
+        group: "Git",
+        items: [
+          {
+            name: "Commit, branch, merge, rebase",
+            type: "Core",
+            what: "Commit je snapshot zmien. Branch je vetva vývoja. Merge spojí históriu vetiev. Rebase presunie commity na nový základ a vytvorí lineárnejšiu históriu.",
+            use: "Používa sa na tímovú spoluprácu, code review, release flow a bezpečnú prácu so zmenami.",
+            remember: ["Merge zachová vetvenú históriu.", "Rebase prepisuje históriu commitov.", "Na zdieľaných branch buď opatrný s rebase.", "Pull request umožňuje review pred merge."],
+            questions: ["Rozdiel medzi merge a rebase?", "Čo je commit hash?", "Prečo nerobiť force push na shared branch?", "Ako riešiť merge conflict?"]
+          },
+          {
+            name: "Remote, pull request, tags",
+            type: "Collaboration",
+            what: "Remote je vzdialený repozitár. Pull request je návrh zmeny s review. Tag označuje konkrétny commit, často release verziu.",
+            use: "Používa sa na code review, spoluprácu, release management a CI/CD triggery.",
+            remember: ["origin je bežný názov remote.", "PR môže spustiť pipeline.", "Annotated tag má metadata.", "Release by mal byť viazaný na commit/tag."],
+            questions: ["Čo je pull request?", "Načo sú Git tagy?", "Ako pipeline vie, čo buildovať?", "Rozdiel medzi fetch a pull?"]
+          },
+          {
+            name: "Stash, cherry-pick, reset, revert",
+            type: "Advanced daily use",
+            what: "Stash dočasne odloží zmeny. Cherry-pick prenesie konkrétny commit. Reset posúva branch pointer a môže meniť working tree. Revert vytvorí nový commit, ktorý zruší starú zmenu.",
+            use: "Používa sa pri hotfixoch, čistení lokálnej práce a bezpečnom vracaní zmien.",
+            remember: ["Revert je bezpečnejší na zdieľanej histórii.", "Reset --hard zahodí lokálne zmeny.", "Cherry-pick môže spôsobiť konflikty.", "Stash je lokálny."],
+            questions: ["Rozdiel medzi reset a revert?", "Kedy použiť cherry-pick?", "Čo robí git stash?", "Ako bezpečne vrátiť commit z produkčnej branch?"]
+          }
+        ]
+      },
+      {
+        group: "Extra overview",
+        items: [
+          {
+            name: "Helm",
+            type: "Kubernetes packaging",
+            what: "Helm je package manager pre Kubernetes. Aplikácia sa balí ako chart, ktorý obsahuje šablóny Kubernetes manifestov a hodnoty vo values.yaml.",
+            use: "Používa sa na jednoduchšie nasadzovanie komplexných aplikácií do Kubernetes a správu verzií deploymentov.",
+            remember: ["Chart je balík.", "Release je nainštalovaná inštancia chartu.", "values.yaml parametrizuje deployment.", "Helm templates generujú Kubernetes YAML."],
+            questions: ["Čo je Helm chart?", "Rozdiel medzi chart a release?", "Načo je values.yaml?", "Prečo používať Helm namiesto čistých YAML súborov?"]
+          },
+          {
+            name: "Jenkins",
+            type: "CI/CD",
+            what: "Jenkins je open-source automation server pre CI/CD. Pipeline sa často definuje v Jenkinsfile.",
+            use: "Používa sa na build, test, deploy a automatizáciu procesov. Má veľa pluginov a dá sa prevádzkovať self-hosted.",
+            remember: ["Jenkinsfile je pipeline as code.", "Agent vykonáva joby.", "Pluginy rozširujú funkcionalitu.", "Treba sa starať o údržbu, security a aktualizácie Jenkins servera."],
+            questions: ["Čo je Jenkinsfile?", "Rozdiel medzi controller a agent?", "Ako Jenkins pracuje so secrets?", "Aké sú výhody a nevýhody self-hosted CI/CD?"]
+          },
+          {
+            name: "Ansible",
+            type: "Configuration management",
+            what: "Ansible je automation/configuration management nástroj. Používa YAML playbooks a väčšinou nepotrebuje agenta na cieľových serveroch.",
+            use: "Používa sa na konfiguráciu serverov, inštaláciu balíkov, správu služieb a opakovateľnú administráciu.",
+            remember: ["Inventory obsahuje hosty.", "Playbook opisuje úlohy.", "Module vykonáva konkrétnu akciu.", "Idempotencia znamená, že opakované spustenie nemení nič, ak je cieľový stav splnený."],
+            questions: ["Čo je Ansible playbook?", "Čo znamená idempotencia?", "Rozdiel medzi Ansible a Terraform?", "Načo je inventory?"]
+          },
+          {
+            name: "MongoDB",
+            type: "NoSQL database",
+            what: "MongoDB je dokumentová NoSQL databáza. Dáta ukladá ako dokumenty podobné JSON/BSON v collections.",
+            use: "Používa sa pre flexibilný dátový model, rýchly vývoj a aplikácie, kde dokumentový model sedí lepšie než relačné tabuľky.",
+            remember: ["Database obsahuje collections.", "Collection obsahuje documents.", "Indexy sú kritické pre výkon.", "Nie je to náhrada SQL pre každý prípad."],
+            questions: ["Rozdiel medzi dokumentovou a relačnou databázou?", "Čo je collection?", "Prečo sú indexy dôležité?", "Kedy by si nepoužil MongoDB?"]
+          },
+          {
+            name: "Azure Service Fabric",
+            type: "Distributed applications",
+            what: "Azure Service Fabric je platforma na beh distribuovaných aplikácií a microservices. Podporuje stateless aj stateful services.",
+            use: "Používala sa hlavne pre komplexné distribuované aplikácie v Microsoft ekosystéme. Dnes sa pri nových projektoch často porovnáva s Kubernetes a PaaS službami.",
+            remember: ["Vie stateful services.", "Cluster tvorí viac nodov.", "Aplikácie sa balia a deployujú ako service packages.", "Nie je to to isté ako AKS."],
+            questions: ["Čo je Service Fabric?", "Rozdiel medzi Service Fabric a Kubernetes?", "Čo znamená stateful service?", "Prečo by firma stále používala Service Fabric?"]
+          },
+          {
+            name: "Groovy",
+            type: "Programming / scripting",
+            what: "Groovy je JVM jazyk podobný Jave, často používaný v Jenkins pipelines a skriptoch.",
+            use: "Používa sa napríklad v Jenkinsfile syntaxe, automatizácii a build skriptoch.",
+            remember: ["Beží na JVM.", "Jenkins scripted pipeline používa Groovy.", "Je dynamickejší než Java.", "Na interview stačí vedieť, že ho stretneš najmä v Jenkins kontexte."],
+            questions: ["Kde sa používa Groovy v DevOps?", "Čo je Jenkinsfile?", "Rozdiel medzi declarative a scripted pipeline?", "Prečo Groovy súvisí s Jenkinsom?"]
+          },
+          {
+            name: "Node.js",
+            type: "Runtime",
+            what: "Node.js je JavaScript runtime na serveri. Umožňuje spúšťať JavaScript mimo prehliadača a často sa používa pre API, tooling a build systémy.",
+            use: "Používa sa na backend služby, CLI nástroje, frontend build pipeline a serverless funkcie.",
+            remember: ["npm je package manager.", "package.json definuje dependencies a scripts.", "Event loop je základ asynchrónneho modelu.", "node_modules obsahuje nainštalované balíky."],
+            questions: ["Čo je Node.js?", "Načo je package.json?", "Čo robí npm install?", "Prečo sa Node.js často objavuje v CI/CD pipeline?"]
+          }
+        ]
+      }
+    ];
+
+    let activeGroup = "Všetko";
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function list(items, cls = "") {
+      return `<ul class="${cls}">${(items || []).map(item => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
+    }
+
+    function matches(item, group, query) {
+      const q = query.trim().toLowerCase();
+
+      if (activeGroup !== "Všetko" && group !== activeGroup) {
+        return false;
+      }
+
+      if (!q) {
+        return true;
+      }
+
+      const haystack = [
+        group,
+        item.name,
+        item.type,
+        item.what,
+        item.use,
+        ...(item.remember || []),
+        ...(item.questions || [])
+      ].join(" ").toLowerCase();
+
+      return haystack.includes(q);
+    }
+
+    function renderNav() {
+      const nav = document.getElementById("nav");
+      const groups = ["Všetko", ...DATA.map(section => section.group), "Q & A"];
+
+      nav.innerHTML = groups.map(group => `
+        <button class="nav-btn ${group === activeGroup ? "active" : ""}" data-group="${escapeHtml(group)}">
+          ${escapeHtml(group)}
+        </button>
+      `).join("");
+
+      nav.querySelectorAll("button").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const group = btn.dataset.group;
+
+          if (group === "Q & A") {
+            document.getElementById("moje-otazky").scrollIntoView({ behavior: "smooth" });
+            return;
+          }
+
+          activeGroup = group;
+          render();
+          window.scrollTo({ top: document.querySelector("main").offsetTop - 10, behavior: "smooth" });
+        });
+      });
+    }
+
+    function renderStats(visibleCount) {
+      const totalItems = DATA.reduce((sum, section) => sum + section.items.length, 0);
+      const azure = DATA.find(x => x.group === "Azure")?.items.length || 0;
+      const aws = DATA.find(x => x.group === "AWS")?.items.length || 0;
+
+      document.getElementById("stats").innerHTML = `
+        <div class="stat">
+          <strong>${totalItems}</strong>
+          <span>tém a služieb v databáze</span>
+        </div>
+        <div class="stat">
+          <strong>${azure}</strong>
+          <span>Azure kariet</span>
+        </div>
+        <div class="stat">
+          <strong>${aws}</strong>
+          <span>AWS kariet</span>
+        </div>
+        <div class="stat">
+          <strong>${visibleCount}</strong>
+          <span>aktuálne zobrazených výsledkov</span>
+        </div>
+      `;
+    }
+
+    function renderCard(item) {
+      const mode = document.getElementById("openMode").value;
+      const openAttr = mode === "open" ? "open" : "";
+
+      return `
+        <details class="card" ${openAttr}>
+          <summary>
+            <div class="summary-row">
+              <div class="title">
+                <strong>${escapeHtml(item.name)}</strong>
+                <span class="tagline">${escapeHtml(item.what)}</span>
+              </div>
+              <span class="badge">${escapeHtml(item.type)}</span>
+            </div>
+          </summary>
+
+          <div class="content">
+            <div class="block">
+              <h3>Čo to robí</h3>
+              <p>${escapeHtml(item.what)}</p>
+            </div>
+
+            <div class="block">
+              <h3>Kedy sa používa</h3>
+              <p>${escapeHtml(item.use)}</p>
+            </div>
+
+            <div class="block">
+              <h3>Zapamätať si</h3>
+              ${list(item.remember)}
+            </div>
+
+            <div class="block">
+              <h3>Možné otázky na pohovore</h3>
+              ${list(item.questions, "questions")}
+            </div>
+          </div>
+        </details>
+      `;
+    }
+
+    function render() {
+      renderNav();
+
+      const query = document.getElementById("search").value;
+      let visibleCount = 0;
+
+      const html = DATA.map(section => {
+        const visibleItems = section.items.filter(item => matches(item, section.group, query));
+        visibleCount += visibleItems.length;
+
+        if (!visibleItems.length) {
+          return "";
+        }
+
+        return `
+          <section class="section" id="${escapeHtml(section.group.toLowerCase().replaceAll(" ", "-"))}">
+            <div class="section-head">
+              <div>
+                <h2>${escapeHtml(section.group)}</h2>
+                <p class="section-desc">${escapeHtml(section.desc)}</p>
+              </div>
+              <span class="badge">${visibleItems.length} položiek</span>
+            </div>
+
+            <div class="grid">
+              ${visibleItems.map(renderCard).join("")}
+            </div>
+          </section>
+        `;
+      }).join("");
+
+      document.getElementById("content").innerHTML = html || `
+        <div class="empty">
+          Nič sa nenašlo. Skús iný výraz, napríklad subnet, IAM, AKS, Terraform, DNS alebo Docker.
+        </div>
+      `;
+
+      renderStats(visibleCount);
+    }
+
+    const STORAGE_KEY = "interview_questions_sk_v1";
+
+    function loadQuestions() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+      } catch {
+        return [];
+      }
+    }
+
+    function saveQuestions(items) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+    }
+
+    function renderQuestions() {
+      const listEl = document.getElementById("questionList");
+      const items = loadQuestions();
+
+      if (!items.length) {
+        listEl.innerHTML = `<div class="empty">Zatiaľ nemáš uložené vlastné otázky.</div>`;
+        return;
+      }
+
+      listEl.innerHTML = items.map((item, index) => `
+        <article class="saved-q">
+          <header>
+            <div>
+              <h3>${escapeHtml(item.question)}</h3>
+              <div class="meta">
+                ${escapeHtml(item.area || "Bez oblasti")} · ${escapeHtml(item.status)} · ${escapeHtml(item.date)}
+              </div>
+            </div>
+
+            <button class="danger" data-delete="${index}">Zmazať</button>
+          </header>
+
+          <p>${escapeHtml(item.answer || "Bez poznámky.")}</p>
+        </article>
+      `).join("");
+
+      listEl.querySelectorAll("[data-delete]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const index = Number(btn.dataset.delete);
+          const items = loadQuestions();
+          items.splice(index, 1);
+          saveQuestions(items);
+          renderQuestions();
+        });
+      });
+    }
+
+    document.getElementById("addQuestion").addEventListener("click", () => {
+      const area = document.getElementById("qArea").value.trim();
+      const question = document.getElementById("qText").value.trim();
+      const answer = document.getElementById("qAnswer").value.trim();
+      const status = document.getElementById("qStatus").value;
+
+      if (!question) {
+        alert("Doplň otázku z pohovoru.");
+        return;
+      }
+
+      const items = loadQuestions();
+
+      items.unshift({
+        area,
+        question,
+        answer,
+        status,
+        date: new Date().toLocaleString("sk-SK")
+      });
+
+      saveQuestions(items);
+
+      document.getElementById("qArea").value = "";
+      document.getElementById("qText").value = "";
+      document.getElementById("qAnswer").value = "";
+      document.getElementById("qStatus").value = "Neviem";
+
+      renderQuestions();
+    });
+
+    document.getElementById("exportQuestions").addEventListener("click", () => {
+      const data = JSON.stringify(loadQuestions(), null, 2);
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+
+      a.href = url;
+      a.download = "moje-interview-otazky.json";
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+
+      URL.revokeObjectURL(url);
+    });
+
+    document.getElementById("clearQuestions").addEventListener("click", () => {
+      if (!confirm("Naozaj chceš vymazať všetky vlastné otázky?")) {
+        return;
+      }
+
+      saveQuestions([]);
+      renderQuestions();
+    });
+
+    document.getElementById("homeReset").addEventListener("click", () => {
+      activeGroup = "Všetko";
+      document.getElementById("search").value = "";
+      document.getElementById("openMode").value = "normal";
+      render();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.getElementById("search").addEventListener("input", render);
+    document.getElementById("openMode").addEventListener("change", render);
+
+    render();
+    renderQuestions();
+  </script>
+</body>
+</html>

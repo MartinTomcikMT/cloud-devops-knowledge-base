@@ -15,8 +15,6 @@
       --line: #374151;
       --accent: #38bdf8;
       --accent2: #22c55e;
-      --warn: #f59e0b;
-      --danger: #ef4444;
       --card: #020617;
       --code: #0b1220;
       --shadow: 0 14px 40px rgba(0,0,0,.35);
@@ -157,14 +155,12 @@
     }
 
     input,
-    textarea,
     select,
     button {
       font: inherit;
     }
 
     input,
-    textarea,
     select {
       width: 100%;
       color: var(--text);
@@ -176,15 +172,9 @@
     }
 
     input:focus,
-    textarea:focus,
     select:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 3px rgba(56,189,248,.14);
-    }
-
-    textarea {
-      min-height: 95px;
-      resize: vertical;
     }
 
     button {
@@ -200,18 +190,6 @@
     button:hover {
       transform: translateY(-1px);
       border-color: var(--accent);
-    }
-
-    .primary {
-      background: linear-gradient(135deg, #0284c7, #16a34a);
-      border: 0;
-      font-weight: 700;
-    }
-
-    .danger {
-      border-color: rgba(239,68,68,.45);
-      color: #fecaca;
-      background: rgba(239,68,68,.12);
     }
 
     .left-panel input,
@@ -404,71 +382,6 @@
       color: #fef3c7;
     }
 
-    .tracker {
-      border: 1px solid var(--line);
-      background: rgba(17,24,39,.86);
-      border-radius: 22px;
-      padding: 18px;
-      box-shadow: var(--shadow);
-      margin-top: 28px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr .6fr;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .actions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin: 10px 0 0;
-    }
-
-    .question-list {
-      display: grid;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .saved-q {
-      border: 1px solid var(--line);
-      background: rgba(2,6,23,.64);
-      border-radius: 14px;
-      padding: 13px;
-    }
-
-    .saved-q header {
-      position: static;
-      padding: 0;
-      border: 0;
-      background: transparent;
-      backdrop-filter: none;
-      display: flex;
-      justify-content: space-between;
-      gap: 12px;
-      align-items: start;
-    }
-
-    .saved-q h3 {
-      margin: 0;
-      font-size: 16px;
-    }
-
-    .saved-q .meta {
-      color: var(--muted);
-      font-size: 12px;
-      margin-top: 4px;
-    }
-
-    .saved-q p {
-      margin: 9px 0 0;
-      color: #d1d5db;
-      white-space: pre-wrap;
-    }
-
     .empty {
       color: var(--muted);
       padding: 16px;
@@ -521,10 +434,6 @@
       .stats {
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
     }
 
     @media (max-width: 560px) {
@@ -550,8 +459,7 @@
 
       .hero,
       .left-panel,
-      .right-panel,
-      .tracker {
+      .right-panel {
         display: none;
       }
 
@@ -596,7 +504,7 @@
 
       <p class="hero-subtitle">
         Overview for Azure, AWS, CI/CD, Terraform, Kubernetes, Docker,<br>
-        Windows, Linux, Networking, Git and common DevOps interview topics.
+        Windows, Linux, Networking, Git and common DevOps topics.
       </p>
     </div>
   </header>
@@ -619,7 +527,9 @@
       </div>
     </aside>
 
-    
+    <section class="center-panel">
+      <div id="content"></div>
+    </section>
 
     <aside class="side-panel right-panel">
       <div class="panel-card sticky-panel">
@@ -639,200 +549,270 @@
             type: "Identity",
             what: "A cloud identity provider for users, groups, applications and service principals. It handles sign-in, SSO, MFA, Conditional Access and identities outside virtual machines or servers.",
             use: "Used to control who or what can authenticate to Azure and enterprise applications. It is the foundation for app registrations, service principals and managed identities.",
-            remember: ["A tenant is an identity boundary.", "Authentication verifies who you are; authorization defines what you can do.", "A service principal is an application or automation identity.", "Managed identity removes the need to manually store and rotate secrets."],
-            questions: ["What is the difference between Entra ID and Azure RBAC?", "What is a service principal and where is it used?", "Why is managed identity safer than a stored client secret?", "What does Conditional Access solve?"]
+            remember: [
+              "A tenant is an identity boundary.",
+              "Authentication verifies who you are; authorization defines what you can do.",
+              "A service principal is an application or automation identity.",
+              "Managed identity removes the need to manually store and rotate secrets."
+            ],
+            questions: [
+              "What is the difference between Entra ID and Azure RBAC?",
+              "What is a service principal and where is it used?",
+              "Why is managed identity safer than a stored client secret?",
+              "What does Conditional Access solve?"
+            ]
           },
           {
             name: "Azure RBAC",
             type: "Access control",
-            what: "Role-Based Access Control defines permissions for Azure resources. Roles are assigned at a scope: management group, subscription, resource group or individual resource.",
-            use: "Used to apply least privilege. For example, a developer can be Reader in production, Contributor in a dev resource group and a pipeline can be allowed to deploy only one specific resource.",
-            remember: ["Permissions are inherited down the scope hierarchy.", "Common built-in roles are Owner, Contributor, Reader and User Access Administrator.", "Custom roles allow more precise permissions.", "RBAC is not the same as network rules."],
-            questions: ["How would you allow a pipeline to deploy only to one resource group?", "What is the difference between Owner and Contributor?", "What does least privilege mean?", "How does inheritance work in Azure RBAC?"]
+            what: "Role-Based Access Control defines permissions for Azure resources. Roles are assigned at a scope such as management group, subscription, resource group or individual resource.",
+            use: "Used to apply least privilege. For example, a developer can be Reader in production, Contributor in a dev resource group and a pipeline can deploy only to a specific resource group.",
+            remember: [
+              "Permissions are inherited down the scope hierarchy.",
+              "Common built-in roles are Owner, Contributor, Reader and User Access Administrator.",
+              "Custom roles allow more precise permissions.",
+              "RBAC is not the same as network rules."
+            ],
+            questions: [
+              "How would you allow a pipeline to deploy only to one resource group?",
+              "What is the difference between Owner and Contributor?",
+              "What does least privilege mean?",
+              "How does inheritance work in Azure RBAC?"
+            ]
           },
           {
             name: "Management Groups / Subscriptions / Resource Groups",
             type: "Governance",
             what: "The hierarchy used to organize Azure environments. Management groups contain subscriptions, a subscription is a billing and isolation boundary, and a resource group is a logical container for resources.",
             use: "Used for organizing environments, billing, policies, RBAC and resource lifecycle. Common patterns include separate dev, test and production subscriptions.",
-            remember: ["A resource group has a region, but it can contain resources from multiple regions.", "Policy and RBAC can be applied higher in the hierarchy.", "Subscriptions have quotas and limits.", "Deleting a resource group deletes the resources inside it."],
-            questions: ["When should environments be split into multiple subscriptions?", "What is a resource group and why is it important?", "What is the difference between a subscription and a tenant?", "How would you organize dev, test and production?"]
+            remember: [
+              "A resource group has a region, but it can contain resources from multiple regions.",
+              "Policy and RBAC can be applied higher in the hierarchy.",
+              "Subscriptions have quotas and limits.",
+              "Deleting a resource group deletes the resources inside it."
+            ],
+            questions: [
+              "When should environments be split into multiple subscriptions?",
+              "What is a resource group and why is it important?",
+              "What is the difference between a subscription and a tenant?",
+              "How would you organize dev, test and production?"
+            ]
           },
           {
             name: "Azure Policy",
             type: "Governance",
             what: "A service for enforcing rules over Azure resources. It can audit or block unwanted configurations such as missing tags, disallowed regions or public IP usage.",
             use: "Used for compliance, standardization and guardrails. It helps teams deploy resources according to company rules.",
-            remember: ["A policy can audit, deny or modify.", "An initiative is a group of policies.", "Policy is not a replacement for monitoring or RBAC.", "It works well with management groups."],
-            questions: ["How would you require every resource to have an owner tag?", "What is the difference between Azure Policy and RBAC?", "What is a policy initiative?", "What happens when a deny policy is triggered?"]
+            remember: [
+              "A policy can audit, deny or modify.",
+              "An initiative is a group of policies.",
+              "Policy is not a replacement for monitoring or RBAC.",
+              "It works well with management groups."
+            ],
+            questions: [
+              "How would you require every resource to have an owner tag?",
+              "What is the difference between Azure Policy and RBAC?",
+              "What is a policy initiative?",
+              "What happens when a deny policy is triggered?"
+            ]
           },
           {
             name: "Azure Virtual Network",
             type: "Networking",
             what: "A private network in Azure. It contains address spaces, subnets, route tables, DNS settings and connects resources such as VMs, AKS and private endpoints.",
             use: "Used for isolation and traffic control. It is the foundation for hybrid connectivity, segmentation and private access to PaaS services.",
-            remember: ["A subnet is part of a VNet address range.", "VNet peering connects Azure networks.", "CIDR ranges must not overlap when peering networks or connecting hybrid networks.", "NSG controls traffic at subnet or NIC level."],
-            questions: ["What is a subnet and why is it used?", "How do you connect two VNets?", "Why is overlapping CIDR a problem?", "What is the difference between a VNet and a subnet?"]
+            remember: [
+              "A subnet is part of a VNet address range.",
+              "VNet peering connects Azure networks.",
+              "CIDR ranges must not overlap when peering networks or connecting hybrid networks.",
+              "NSG controls traffic at subnet or NIC level."
+            ],
+            questions: [
+              "What is a subnet and why is it used?",
+              "How do you connect two VNets?",
+              "Why is overlapping CIDR a problem?",
+              "What is the difference between a VNet and a subnet?"
+            ]
           },
           {
             name: "Network Security Group",
             type: "Networking",
             what: "An NSG is a stateful firewall rule set for inbound and outbound traffic at subnet or network interface level.",
             use: "Used to allow or block traffic between subnets, virtual machines and the internet. A common use case is limiting SSH or RDP only to an admin network.",
-            remember: ["Rules have priorities; lower numbers win.", "NSG is stateful, so return traffic for an allowed connection is automatically allowed.", "Default rules always exist.", "NSG is not a Layer 7 firewall."],
-            questions: ["How would you allow SSH only from one IP address?", "What does priority mean in NSG rules?", "What is the difference between NSG and Azure Firewall?", "Is NSG stateful or stateless?"]
+            remember: [
+              "Rules have priorities; lower numbers win.",
+              "NSG is stateful, so return traffic for an allowed connection is automatically allowed.",
+              "Default rules always exist.",
+              "NSG is not a Layer 7 firewall."
+            ],
+            questions: [
+              "How would you allow SSH only from one IP address?",
+              "What does priority mean in NSG rules?",
+              "What is the difference between NSG and Azure Firewall?",
+              "Is NSG stateful or stateless?"
+            ]
           },
           {
             name: "Azure Firewall",
             type: "Security / Networking",
             what: "A managed network firewall for centralized protection. It supports network rules, application rules, NAT rules, threat intelligence and logging.",
             use: "Used in hub-and-spoke architectures for ingress and egress control, centralized logging and security rules.",
-            remember: ["It is useful for centralized traffic control.", "It supports FQDN rules for outbound HTTP/S.", "It is often combined with route tables.", "It is not the same as NSG."],
-            questions: ["When would you use Azure Firewall instead of NSG?", "What is a hub-and-spoke network architecture?", "How do you force subnet traffic through a firewall?", "What are application rules?"]
-          },
-          {
-            name: "VPN Gateway / ExpressRoute",
-            type: "Hybrid networking",
-            what: "VPN Gateway connects an on-premises network to Azure through an encrypted tunnel over the internet. ExpressRoute is a private dedicated connection outside the public internet.",
-            use: "VPN is usually cheaper and faster to set up. ExpressRoute is used for higher stability, throughput and enterprise hybrid scenarios.",
-            remember: ["VPN uses an IPsec tunnel.", "ExpressRoute is not an internet VPN.", "GatewaySubnet is a special subnet for the gateway.", "BGP is used for dynamic routing."],
-            questions: ["What is the difference between Site-to-Site VPN and ExpressRoute?", "What is GatewaySubnet used for?", "What is BGP?", "How would you design hybrid connectivity to Azure?"]
+            remember: [
+              "It is useful for centralized traffic control.",
+              "It supports FQDN rules for outbound HTTP/S.",
+              "It is often combined with route tables.",
+              "It is not the same as NSG."
+            ],
+            questions: [
+              "When would you use Azure Firewall instead of NSG?",
+              "What is a hub-and-spoke network architecture?",
+              "How do you force subnet traffic through a firewall?",
+              "What are application rules?"
+            ]
           },
           {
             name: "Private Link / Private Endpoint / Private DNS",
             type: "Private access",
             what: "A Private Endpoint gives a PaaS service a private IP address inside a VNet. Private Link enables private access to a service without using the public internet.",
             use: "Used when services such as Storage, SQL or Key Vault should not be publicly reachable.",
-            remember: ["A private endpoint is a network interface with a private IP.", "DNS is critical; otherwise clients may still resolve the public endpoint.", "Public network access is often disabled.", "NSG and routing behavior depends on service configuration."],
-            questions: ["Why must DNS be handled after creating a private endpoint?", "How do you disable public access to a Storage Account?", "What is the difference between service endpoint and private endpoint?", "What is Private Link?"]
-          },
-          {
-            name: "Azure Load Balancer",
-            type: "Load balancing",
-            what: "A Layer 4 load balancer for TCP and UDP traffic. It distributes traffic across backend instances such as VMs or VM scale sets.",
-            use: "Used for simple L4 balancing, inbound NAT rules and internal or public load balancing scenarios.",
-            remember: ["It works at Layer 4, not HTTP path routing.", "Health probes determine backend health.", "It can be public or internal.", "For L7 HTTP routing, Application Gateway or Front Door is usually better."],
-            questions: ["What is the difference between Azure Load Balancer and Application Gateway?", "What is a health probe?", "When would you use an internal load balancer?", "Which OSI layer does it operate on?"]
-          },
-          {
-            name: "Application Gateway + WAF",
-            type: "Application delivery",
-            what: "A Layer 7 load balancer for HTTP/S applications. It supports TLS termination, host and path-based routing, cookie affinity and Web Application Firewall.",
-            use: "Used for web applications that need URL-based routing, HTTPS offload or protection against common web attacks.",
-            remember: ["It works at Layer 7.", "WAF protects against OWASP Top 10 style attacks.", "The backend pool can contain VMs, App Service or AKS ingress.", "Listener, rule, backend pool and probe are core configuration parts."],
-            questions: ["When would you use Application Gateway instead of Load Balancer?", "What does WAF do?", "What is TLS termination?", "How does path-based routing work?"]
-          },
-          {
-            name: "Azure Front Door / Traffic Manager",
-            type: "Global routing",
-            what: "Front Door is a global Layer 7 entry point with routing, TLS, acceleration and WAF. Traffic Manager is DNS-based traffic routing by priority, performance or geography.",
-            use: "Front Door is useful for global web applications. Traffic Manager is useful for DNS failover or geographic routing.",
-            remember: ["Front Door proxies HTTP/S traffic.", "Traffic Manager returns DNS answers and is not a proxy.", "Front Door supports WAF.", "DNS TTL affects failover speed with Traffic Manager."],
-            questions: ["What is the difference between Front Door and Traffic Manager?", "Which service works through DNS?", "How would you design global failover for a web application?", "Where would you enable WAF?"]
-          },
-          {
-            name: "Azure Virtual Machines",
-            type: "Compute",
-            what: "IaaS virtual servers in Azure. You manage the operating system, patching, software, disks, network and security.",
-            use: "Used for legacy applications, custom workloads, Windows or Linux servers, or cases where PaaS and containers are not suitable.",
-            remember: ["A VM needs an OS disk and NIC.", "Availability Sets and Zones improve availability.", "Managed disks simplify storage.", "Patching and hardening are the team's responsibility."],
-            questions: ["When would you use a VM instead of App Service?", "How do you make VMs highly available?", "What is a managed disk?", "How do you restrict RDP or SSH access?"]
-          },
-          {
-            name: "Virtual Machine Scale Sets",
-            type: "Compute scaling",
-            what: "A group of identical VM instances that can scale automatically based on rules or metrics.",
-            use: "Used for horizontal scaling of VM-based applications, batch workers or backend pools behind load balancers.",
-            remember: ["Autoscale can react to CPU, queue length or custom metrics.", "Instances use the same image or model.", "Rolling upgrades reduce downtime.", "VMSS is often combined with Load Balancer or Application Gateway."],
-            questions: ["What is horizontal scaling?", "How does autoscale work in VMSS?", "What is the difference between VM and VMSS?", "How do you minimize downtime during updates?"]
-          },
-          {
-            name: "Azure App Service",
-            type: "PaaS compute",
-            what: "A managed platform for hosting web applications and APIs without managing servers. It supports deployment slots, autoscale, custom domains and TLS.",
-            use: "Used for websites and APIs when you want less infrastructure management than with VMs.",
-            remember: ["The App Service Plan defines compute capacity.", "Deployment slots enable blue/green style swaps.", "Runtime can be .NET, Java, Node.js, Python, PHP or a container.", "Scaling happens at the plan level."],
-            questions: ["What is an App Service Plan?", "What are deployment slots used for?", "When would you use App Service instead of AKS?", "How are custom domains and TLS handled?"]
-          },
-          {
-            name: "Azure Functions",
-            type: "Serverless",
-            what: "Serverless compute for event-driven code. A function is triggered by events such as an HTTP request, timer, queue message or event stream.",
-            use: "Used for small integration tasks, automation, event processing and background jobs without managing servers.",
-            remember: ["A trigger starts a function; a binding connects inputs or outputs.", "Consumption plan scales automatically but may have cold starts.", "Durable Functions support orchestration of longer workflows.", "It is not ideal for long-running monoliths."],
-            questions: ["What are triggers and bindings?", "What is a cold start?", "When would you use Azure Functions?", "What is the difference between Functions and App Service?"]
-          },
-          {
-            name: "Azure Container Apps",
-            type: "Containers",
-            what: "A managed container platform based on Kubernetes concepts without requiring cluster management. It supports HTTP ingress, KEDA autoscaling and revisions.",
-            use: "Used for microservices, APIs, workers and event-driven containers when you do not want to operate AKS.",
-            remember: ["A Container Apps Environment is an isolation boundary.", "Revisions allow traffic splitting.", "KEDA scales based on events.", "It is simpler than AKS but less flexible."],
-            questions: ["When would you use Container Apps instead of AKS?", "What is a revision?", "How does KEDA autoscaling work?", "How is ingress handled?"]
+            remember: [
+              "A private endpoint is a network interface with a private IP.",
+              "DNS is critical; otherwise clients may still resolve the public endpoint.",
+              "Public network access is often disabled.",
+              "NSG and routing behavior depends on service configuration."
+            ],
+            questions: [
+              "Why must DNS be handled after creating a private endpoint?",
+              "How do you disable public access to a Storage Account?",
+              "What is the difference between service endpoint and private endpoint?",
+              "What is Private Link?"
+            ]
           },
           {
             name: "Azure Kubernetes Service",
             type: "Kubernetes",
             what: "A managed Kubernetes cluster in Azure. Azure manages the control plane, while you manage node pools, workloads, networking, security and add-ons.",
             use: "Used for containerized microservices, complex deployments, autoscaling and cloud-native applications.",
-            remember: ["A node pool is a group of worker nodes.", "AKS can use Azure CNI or kubenet.", "Ingress Controller handles HTTP/S entry.", "Integration with ACR, Entra ID, Monitor and Key Vault is common."],
-            questions: ["What does Azure manage in AKS and what do you manage?", "What is the difference between pod, deployment and service?", "How do you connect AKS to ACR?", "How would you troubleshoot CrashLoopBackOff?"]
+            remember: [
+              "A node pool is a group of worker nodes.",
+              "AKS can use Azure CNI or kubenet.",
+              "Ingress Controller handles HTTP/S entry.",
+              "Integration with ACR, Entra ID, Monitor and Key Vault is common."
+            ],
+            questions: [
+              "What does Azure manage in AKS and what do you manage?",
+              "What is the difference between pod, deployment and service?",
+              "How do you connect AKS to ACR?",
+              "How would you troubleshoot CrashLoopBackOff?"
+            ]
+          },
+          {
+            name: "Azure App Service",
+            type: "PaaS compute",
+            what: "A managed platform for hosting web applications and APIs without managing servers. It supports deployment slots, autoscale, custom domains and TLS.",
+            use: "Used for websites and APIs when you want less infrastructure management than with VMs.",
+            remember: [
+              "The App Service Plan defines compute capacity.",
+              "Deployment slots enable blue/green style swaps.",
+              "Runtime can be .NET, Java, Node.js, Python, PHP or a container.",
+              "Scaling happens at the plan level."
+            ],
+            questions: [
+              "What is an App Service Plan?",
+              "What are deployment slots used for?",
+              "When would you use App Service instead of AKS?",
+              "How are custom domains and TLS handled?"
+            ]
+          },
+          {
+            name: "Azure Functions",
+            type: "Serverless",
+            what: "Serverless compute for event-driven code. A function is triggered by events such as an HTTP request, timer, queue message or event stream.",
+            use: "Used for small integration tasks, automation, event processing and background jobs without managing servers.",
+            remember: [
+              "A trigger starts a function; a binding connects inputs or outputs.",
+              "Consumption plan scales automatically but may have cold starts.",
+              "Durable Functions support orchestration of longer workflows.",
+              "It is not ideal for long-running monoliths."
+            ],
+            questions: [
+              "What are triggers and bindings?",
+              "What is a cold start?",
+              "When would you use Azure Functions?",
+              "What is the difference between Functions and App Service?"
+            ]
           },
           {
             name: "Azure Container Registry",
             type: "Container registry",
             what: "A private registry for Docker and OCI images and Helm charts. It is where AKS, Container Apps or pipelines pull container images from.",
             use: "Used in CI/CD flows: build image, push to ACR and deploy to a runtime environment.",
-            remember: ["It supports private registries.", "AKS can pull images using managed identity.", "Image tags should be controlled, for example with a commit SHA.", "ACR Tasks can build images."],
-            questions: ["What is a container registry used for?", "How do you secure image pulls from AKS?", "Why should you avoid always using the latest tag?", "What is an immutable image tag?"]
-          },
-          {
-            name: "Storage Account",
-            type: "Storage",
-            what: "A core Azure storage service for Blob, File, Queue and Table storage. It stores objects, file shares, messages and simple NoSQL tables.",
-            use: "Used for static files, backups, logs, data lakes, file shares, queue-based integrations and general object storage.",
-            remember: ["Blob is object storage.", "Azure Files is an SMB/NFS file share.", "Queue Storage is a simple message queue.", "Access tiers include Hot, Cool and Archive.", "SAS tokens provide time-limited access."],
-            questions: ["What is the difference between Blob and Azure Files?", "What is a SAS token?", "How do you disable public access?", "When would you use Hot versus Archive tier?"]
+            remember: [
+              "It supports private registries.",
+              "AKS can pull images using managed identity.",
+              "Image tags should be controlled, for example with a commit SHA.",
+              "ACR Tasks can build images."
+            ],
+            questions: [
+              "What is a container registry used for?",
+              "How do you secure image pulls from AKS?",
+              "Why should you avoid always using the latest tag?",
+              "What is an immutable image tag?"
+            ]
           },
           {
             name: "Azure Key Vault",
             type: "Secrets",
             what: "A service for securely storing secrets, keys and certificates. It integrates with managed identities and access auditing.",
             use: "Used for connection strings, API keys, certificates and encryption keys without storing secrets in source code or plaintext pipeline variables.",
-            remember: ["Secrets are values, keys are cryptographic keys and certificates are certificates.", "Access can be controlled through RBAC or access policies.", "Soft delete and purge protection protect against accidental deletion.", "Applications should ideally access it through managed identity."],
-            questions: ["Why should secrets not be stored in Git?", "How can an application safely read a secret from Key Vault?", "What is the difference between a secret and a key?", "What is purge protection?"]
+            remember: [
+              "Secrets are values, keys are cryptographic keys and certificates are certificates.",
+              "Access can be controlled through RBAC or access policies.",
+              "Soft delete and purge protection protect against accidental deletion.",
+              "Applications should ideally access it through managed identity."
+            ],
+            questions: [
+              "Why should secrets not be stored in Git?",
+              "How can an application safely read a secret from Key Vault?",
+              "What is the difference between a secret and a key?",
+              "What is purge protection?"
+            ]
           },
           {
             name: "Azure Monitor / Log Analytics / Application Insights",
             type: "Monitoring",
             what: "Azure Monitor collects metrics and logs. Log Analytics provides KQL queries. Application Insights monitors applications, requests, dependencies and exceptions.",
             use: "Used for observability, alerting, troubleshooting, performance analysis and audit.",
-            remember: ["Metrics are numeric time series.", "Logs are detailed events and records.", "KQL is the query language for logs.", "Alerts can react to metrics or log queries."],
-            questions: ["What is the difference between metrics and logs?", "What is Application Insights used for?", "What is KQL?", "How would you investigate an API latency incident?"]
-          },
-          {
-            name: "Service Bus / Event Grid / Event Hubs",
-            type: "Messaging",
-            what: "Service Bus is an enterprise message broker with queues and topics. Event Grid routes events. Event Hubs is a high-throughput streaming ingestion service.",
-            use: "Service Bus is used for reliable messaging and decoupling. Event Grid reacts to events. Event Hubs ingests large volumes of telemetry or streaming data.",
-            remember: ["Queue means one consumer receives a message.", "Topic and subscription provide publish-subscribe.", "Event Grid delivers events.", "Event Hubs is similar to a streaming ingestion system."],
-            questions: ["What is the difference between Service Bus and Event Grid?", "When would you use a topic instead of a queue?", "What is a dead-letter queue?", "When would you use Event Hubs?"]
-          },
-          {
-            name: "Azure API Management",
-            type: "API gateway",
-            what: "A managed API gateway for publishing, securing, transforming and monitoring APIs. It supports policies, rate limiting, subscriptions and a developer portal.",
-            use: "Used as an entry layer in front of backend APIs when unified authentication, throttling, versioning and API documentation are required.",
-            remember: ["A policy can modify requests or responses.", "Rate limiting protects the backend.", "APIM is not the backend application.", "It can be public or internal."],
-            questions: ["What is an API gateway used for?", "What is rate limiting?", "How would you hide a backend API from direct internet access?", "What are APIM policies?"]
+            remember: [
+              "Metrics are numeric time series.",
+              "Logs are detailed events and records.",
+              "KQL is the query language for logs.",
+              "Alerts can react to metrics or log queries."
+            ],
+            questions: [
+              "What is the difference between metrics and logs?",
+              "What is Application Insights used for?",
+              "What is KQL?",
+              "How would you investigate an API latency incident?"
+            ]
           },
           {
             name: "Azure DevOps / Pipelines",
             type: "CI/CD",
             what: "A platform for repos, boards, pipelines, artifacts and test plans. Azure Pipelines automates build, test and deployment.",
             use: "Used for CI/CD of applications and infrastructure. YAML pipelines define build, test and deploy steps as code.",
-            remember: ["A pipeline agent runs jobs.", "A stage can represent dev, test or production.", "A service connection gives a pipeline access to the cloud.", "Secrets belong in variable groups, Key Vault or secure storage."],
-            questions: ["What is the difference between CI and CD?", "What is a service connection?", "How would you deploy Terraform through a pipeline?", "How do you protect secrets in a pipeline?"]
+            remember: [
+              "A pipeline agent runs jobs.",
+              "A stage can represent dev, test or production.",
+              "A service connection gives a pipeline access to the cloud.",
+              "Secrets belong in variable groups, Key Vault or secure storage."
+            ],
+            questions: [
+              "What is the difference between CI and CD?",
+              "What is a service connection?",
+              "How would you deploy Terraform through a pipeline?",
+              "How do you protect secrets in a pipeline?"
+            ]
           }
         ]
       },
@@ -844,184 +824,252 @@
             type: "Identity",
             what: "Identity and Access Management controls users, groups, roles, policies and permissions in AWS. It is the security foundation of every AWS account.",
             use: "Used to grant permissions to people, applications, EC2 instances, Lambda functions or CI/CD pipelines.",
-            remember: ["A policy is a JSON document with Allow or Deny statements.", "A role is assumed and uses temporary credentials.", "Explicit Deny takes precedence.", "The root account should not be used for daily work."],
-            questions: ["What is the difference between an IAM user and an IAM role?", "What is least privilege?", "How does AssumeRole work?", "Why is the root account risky?"]
+            remember: [
+              "A policy is a JSON document with Allow or Deny statements.",
+              "A role is assumed and uses temporary credentials.",
+              "Explicit Deny takes precedence.",
+              "The root account should not be used for daily work."
+            ],
+            questions: [
+              "What is the difference between an IAM user and an IAM role?",
+              "What is least privilege?",
+              "How does AssumeRole work?",
+              "Why is the root account risky?"
+            ]
           },
           {
             name: "AWS Organizations / Accounts",
             type: "Governance",
             what: "A service for managing multiple AWS accounts. It supports organizational units, consolidated billing and Service Control Policies.",
             use: "Used to separate dev, test, production, teams, security accounts and centralized enterprise rules.",
-            remember: ["An account is a strong isolation boundary.", "SCP limits the maximum allowed permissions.", "The management account must be protected.", "A multi-account strategy is a common enterprise pattern."],
-            questions: ["Why use multiple AWS accounts?", "What is an SCP?", "What is the difference between an IAM policy and an SCP?", "How would you separate production from development?"]
+            remember: [
+              "An account is a strong isolation boundary.",
+              "SCP limits the maximum allowed permissions.",
+              "The management account must be protected.",
+              "A multi-account strategy is a common enterprise pattern."
+            ],
+            questions: [
+              "Why use multiple AWS accounts?",
+              "What is an SCP?",
+              "What is the difference between an IAM policy and an SCP?",
+              "How would you separate production from development?"
+            ]
           },
           {
             name: "VPC",
             type: "Networking",
             what: "Virtual Private Cloud is an isolated virtual network in AWS. It contains CIDR ranges, subnets, route tables, gateways, endpoints and security controls.",
             use: "Used for network isolation and traffic control between EC2, RDS, EKS, the internet and on-premises networks.",
-            remember: ["A subnet is tied to an Availability Zone.", "A public subnet has a route to an Internet Gateway.", "A private subnet has no direct inbound internet access.", "CIDR planning should be done in advance."],
-            questions: ["What is the difference between a public and private subnet?", "What is a route table?", "How does a private subnet get outbound internet access?", "Why is overlapping CIDR a problem?"]
-          },
-          {
-            name: "Subnets / NAT Gateway / Internet Gateway",
-            type: "Networking",
-            what: "Subnets divide a VPC by Availability Zone and purpose. Route tables define routing. Internet Gateway enables internet access for public subnets. NAT Gateway gives private subnets outbound internet access.",
-            use: "Used for a common architecture: public subnet for load balancers, private subnet for applications and databases.",
-            remember: ["NAT Gateway is for outbound traffic from private subnets.", "Internet Gateway enables public internet routing.", "A public IP alone is not enough without a route.", "Route 0.0.0.0/0 defines the default route."],
-            questions: ["How do you allow a private EC2 instance to download updates from the internet?", "What is NAT Gateway used for?", "What does Internet Gateway do?", "Why place a database in a private subnet?"]
+            remember: [
+              "A subnet is tied to an Availability Zone.",
+              "A public subnet has a route to an Internet Gateway.",
+              "A private subnet has no direct inbound internet access.",
+              "CIDR planning should be done in advance."
+            ],
+            questions: [
+              "What is the difference between a public and private subnet?",
+              "What is a route table?",
+              "How does a private subnet get outbound internet access?",
+              "Why is overlapping CIDR a problem?"
+            ]
           },
           {
             name: "Security Groups / NACL",
             type: "Network security",
             what: "A Security Group is a stateful firewall at ENI or instance level. A NACL is a stateless firewall at subnet level.",
             use: "Security Groups are most often used for application-level network rules. NACLs provide an additional subnet-level control layer.",
-            remember: ["Security Group is stateful.", "NACL is stateless and needs both inbound and outbound rules.", "Security Groups do not have explicit deny, only allow.", "NACL rules have numbers and are evaluated in order."],
-            questions: ["What is the difference between Security Group and NACL?", "What does stateful mean?", "Why does NACL need ephemeral ports?", "How do you allow HTTP only from a load balancer?"]
+            remember: [
+              "Security Group is stateful.",
+              "NACL is stateless and needs both inbound and outbound rules.",
+              "Security Groups do not have explicit deny, only allow.",
+              "NACL rules have numbers and are evaluated in order."
+            ],
+            questions: [
+              "What is the difference between Security Group and NACL?",
+              "What does stateful mean?",
+              "Why does NACL need ephemeral ports?",
+              "How do you allow HTTP only from a load balancer?"
+            ]
           },
           {
             name: "Route 53",
             type: "DNS",
             what: "AWS managed DNS service. It handles hosted zones, DNS records, health checks and routing policies.",
             use: "Used for domain management and routing traffic to ALB, CloudFront, S3 static hosting or regional failover targets.",
-            remember: ["A hosted zone contains DNS records.", "Alias records point to AWS resources and avoid CNAME limitations at the root domain.", "TTL affects caching.", "Routing policies include simple, weighted, latency, failover and geolocation."],
-            questions: ["What is a hosted zone?", "What is the difference between A, CNAME and Alias records?", "How do you implement DNS failover?", "What does TTL mean?"]
+            remember: [
+              "A hosted zone contains DNS records.",
+              "Alias records point to AWS resources and avoid CNAME limitations at the root domain.",
+              "TTL affects caching.",
+              "Routing policies include simple, weighted, latency, failover and geolocation."
+            ],
+            questions: [
+              "What is a hosted zone?",
+              "What is the difference between A, CNAME and Alias records?",
+              "How do you implement DNS failover?",
+              "What does TTL mean?"
+            ]
           },
           {
             name: "CloudFront",
             type: "CDN",
             what: "A Content Delivery Network that caches content at edge locations. It supports TLS, WAF integration, signed URLs and origins such as S3 or ALB.",
             use: "Used to speed up websites, distribute static files, protect origins and improve global availability.",
-            remember: ["An origin is the source of content.", "A cache behavior defines cache and routing rules.", "Invalidation removes a cached object.", "CloudFront is a global service."],
-            questions: ["What is a CDN used for?", "What is an origin?", "When should you perform cache invalidation?", "How do you protect an S3 bucket behind CloudFront?"]
+            remember: [
+              "An origin is the source of content.",
+              "A cache behavior defines cache and routing rules.",
+              "Invalidation removes a cached object.",
+              "CloudFront is a global service."
+            ],
+            questions: [
+              "What is a CDN used for?",
+              "What is an origin?",
+              "When should you perform cache invalidation?",
+              "How do you protect an S3 bucket behind CloudFront?"
+            ]
           },
           {
             name: "ELB / ALB / NLB",
             type: "Load balancing",
             what: "Elastic Load Balancing distributes traffic across targets. ALB is Layer 7 for HTTP/S. NLB is Layer 4 for TCP/UDP and high performance.",
             use: "ALB is used for web applications, host/path routing and TLS termination. NLB is used for low latency, TCP traffic or static IP requirements.",
-            remember: ["A target group contains backends.", "Health checks determine target health.", "ALB supports path-based routing.", "NLB works at Layer 4."],
-            questions: ["What is the difference between ALB and NLB?", "What is a target group?", "How does a health check work?", "Where would you terminate TLS?"]
+            remember: [
+              "A target group contains backends.",
+              "Health checks determine target health.",
+              "ALB supports path-based routing.",
+              "NLB works at Layer 4."
+            ],
+            questions: [
+              "What is the difference between ALB and NLB?",
+              "What is a target group?",
+              "How does a health check work?",
+              "Where would you terminate TLS?"
+            ]
           },
           {
             name: "EC2",
             type: "Compute",
             what: "Elastic Compute Cloud provides virtual servers in AWS. You manage the operating system, patching, runtime, network and security.",
             use: "Used for legacy workloads, custom servers, applications outside PaaS/serverless models or when full OS control is required.",
-            remember: ["AMI is the image for an instance.", "Instance type defines CPU, memory and network capacity.", "User data runs a bootstrap script.", "Instance profile attaches an IAM role to EC2."],
-            questions: ["What is an AMI?", "How do you give EC2 secure access to S3 without access keys?", "What is user data?", "How do you make EC2 applications highly available?"]
-          },
-          {
-            name: "Auto Scaling Group",
-            type: "Scaling",
-            what: "A group of EC2 instances that maintains desired capacity and can scale based on rules or metrics.",
-            use: "Used for horizontal scaling and self-healing of an EC2 fleet behind a load balancer.",
-            remember: ["A launch template defines instance configuration.", "Desired, minimum and maximum capacity control the number of instances.", "Scaling policies can react to CPU or custom metrics.", "ASG replaces unhealthy instances."],
-            questions: ["What is desired capacity?", "How does ASG react to a failed instance?", "What is a launch template?", "What is the difference between vertical and horizontal scaling?"]
+            remember: [
+              "AMI is the image for an instance.",
+              "Instance type defines CPU, memory and network capacity.",
+              "User data runs a bootstrap script.",
+              "Instance profile attaches an IAM role to EC2."
+            ],
+            questions: [
+              "What is an AMI?",
+              "How do you give EC2 secure access to S3 without access keys?",
+              "What is user data?",
+              "How do you make EC2 applications highly available?"
+            ]
           },
           {
             name: "S3",
             type: "Object storage",
             what: "Simple Storage Service is object storage for files, backups, static hosting, logs and data lakes.",
             use: "Used to store objects using a bucket/key model. Common in CI/CD, data pipelines, backups and web distribution.",
-            remember: ["A bucket is a container; an object is a file with a key.", "Versioning protects against overwrite or deletion.", "Lifecycle policies move or delete objects.", "Bucket policies and IAM policies control access."],
-            questions: ["What is the difference between S3 and EBS?", "How do you block public access?", "What is a lifecycle policy?", "What is versioning used for?"]
-          },
-          {
-            name: "EBS / EFS / FSx",
-            type: "Storage",
-            what: "EBS is block storage for EC2. EFS is a managed NFS file system for multiple clients. FSx provides managed file systems such as Windows File Server or Lustre.",
-            use: "EBS is used as a disk for one EC2 instance. EFS is used for shared files across instances. FSx is used for enterprise or high-performance file workloads.",
-            remember: ["EBS is usually attached to one instance in one AZ.", "EFS is a regional managed NFS service.", "Snapshots are used for EBS backup.", "File, block and object storage solve different needs."],
-            questions: ["What is the difference between EBS, EFS and S3?", "When would you use EFS?", "What is an EBS snapshot?", "Why is EBS not ideal as a shared file system?"]
+            remember: [
+              "A bucket is a container; an object is a file with a key.",
+              "Versioning protects against overwrite or deletion.",
+              "Lifecycle policies move or delete objects.",
+              "Bucket policies and IAM policies control access."
+            ],
+            questions: [
+              "What is the difference between S3 and EBS?",
+              "How do you block public access?",
+              "What is a lifecycle policy?",
+              "What is versioning used for?"
+            ]
           },
           {
             name: "Lambda",
             type: "Serverless",
             what: "Serverless compute for running functions based on events without managing servers. It can be triggered by API Gateway, S3 events, EventBridge or SQS.",
             use: "Used for event-driven automation, API backends, file processing, scheduled jobs and integration logic.",
-            remember: ["You pay for invocations and duration.", "Cold starts can affect latency.", "Execution role gives permissions to the function.", "Timeout and memory must match the workload."],
-            questions: ["What is a cold start?", "How does Lambda get permission to read S3?", "When is Lambda not suitable?", "How would you troubleshoot a timeout?"]
+            remember: [
+              "You pay for invocations and duration.",
+              "Cold starts can affect latency.",
+              "Execution role gives permissions to the function.",
+              "Timeout and memory must match the workload."
+            ],
+            questions: [
+              "What is a cold start?",
+              "How does Lambda get permission to read S3?",
+              "When is Lambda not suitable?",
+              "How would you troubleshoot a timeout?"
+            ]
           },
           {
             name: "ECS / Fargate",
             type: "Containers",
             what: "Elastic Container Service is the AWS container orchestrator. Fargate is serverless compute for ECS and EKS where you do not manage EC2 nodes.",
             use: "Used to run containers without the full complexity of Kubernetes. Fargate simplifies operations, while ECS on EC2 gives more control.",
-            remember: ["Task definition describes container, CPU, memory, environment variables and ports.", "A service maintains the desired number of running tasks.", "A cluster is a logical container for tasks and services.", "Fargate removes server management."],
-            questions: ["What is the difference between ECS and EKS?", "What is a task definition?", "When would you use Fargate?", "How does an ECS service work with ALB?"]
+            remember: [
+              "Task definition describes container, CPU, memory, environment variables and ports.",
+              "A service maintains the desired number of running tasks.",
+              "A cluster is a logical container for tasks and services.",
+              "Fargate removes server management."
+            ],
+            questions: [
+              "What is the difference between ECS and EKS?",
+              "What is a task definition?",
+              "When would you use Fargate?",
+              "How does an ECS service work with ALB?"
+            ]
           },
           {
             name: "EKS",
             type: "Kubernetes",
             what: "Elastic Kubernetes Service is managed Kubernetes in AWS. AWS manages the control plane, while you manage worker nodes, add-ons, networking and workloads.",
             use: "Used when a team needs the Kubernetes API, Helm, operators, GitOps and a portable cloud-native platform.",
-            remember: ["Node groups can be managed or self-managed.", "IRSA connects a Kubernetes service account to an IAM role.", "EKS uses the VPC CNI plugin.", "Ingress often uses AWS Load Balancer Controller."],
-            questions: ["What is IRSA?", "What does AWS manage in EKS?", "How is ALB created for Kubernetes ingress?", "What is the difference between ECS and EKS?"]
-          },
-          {
-            name: "ECR",
-            type: "Container registry",
-            what: "Elastic Container Registry is a private registry for container images. It integrates with ECS, EKS, Lambda and IAM.",
-            use: "Used in CI/CD pipelines to store an image after build and deploy it to a container runtime.",
-            remember: ["Image push and pull are controlled by IAM permissions.", "Tagging with commit SHA improves traceability.", "Lifecycle rules clean old images.", "ECR can scan images for vulnerabilities."],
-            questions: ["What is ECR used for?", "How does a pipeline push an image to ECR?", "Why avoid relying only on the latest tag?", "How do you clean up old images?"]
+            remember: [
+              "Node groups can be managed or self-managed.",
+              "IRSA connects a Kubernetes service account to an IAM role.",
+              "EKS uses the VPC CNI plugin.",
+              "Ingress often uses AWS Load Balancer Controller."
+            ],
+            questions: [
+              "What is IRSA?",
+              "What does AWS manage in EKS?",
+              "How is ALB created for Kubernetes ingress?",
+              "What is the difference between ECS and EKS?"
+            ]
           },
           {
             name: "RDS / Aurora",
             type: "Database",
             what: "RDS is a managed relational database service for engines such as PostgreSQL, MySQL, MariaDB, SQL Server and Oracle. Aurora is an AWS-optimized MySQL/PostgreSQL-compatible database.",
             use: "Used when you need a relational database without managing the OS, patching and most infrastructure tasks.",
-            remember: ["Multi-AZ provides high availability.", "Read replicas improve read scaling.", "Backup and point-in-time restore are important.", "Security groups and subnet groups control networking."],
-            questions: ["What is the difference between RDS and a database on EC2?", "What is Multi-AZ?", "What is the difference between read replica and Multi-AZ?", "How do you secure RDS in private subnets?"]
-          },
-          {
-            name: "DynamoDB",
-            type: "NoSQL database",
-            what: "A managed NoSQL key-value and document database with high scalability and low latency.",
-            use: "Used for serverless applications, session storage, event data, high-scale key-value access and simple NoSQL data models.",
-            remember: ["Partition key determines data distribution.", "Sort key enables ordering inside a partition.", "GSI and LSI are indexes.", "On-demand or provisioned capacity controls throughput."],
-            questions: ["What is a partition key?", "When would you use DynamoDB instead of RDS?", "What is a GSI?", "How do you avoid hot partitions?"]
-          },
-          {
-            name: "SQS / SNS / EventBridge",
-            type: "Messaging",
-            what: "SQS is a message queue. SNS is a pub/sub notification service. EventBridge is an event bus for routing events between services and applications.",
-            use: "Used for decoupling, retries, event-driven architecture and asynchronous communication.",
-            remember: ["SQS uses a pull model.", "SNS pushes messages to subscribers.", "EventBridge routes events using rules.", "DLQ helps handle failed messages."],
-            questions: ["What is the difference between SQS and SNS?", "What is a dead-letter queue?", "When would you use EventBridge?", "How do you prevent message loss?"]
-          },
-          {
-            name: "API Gateway",
-            type: "API gateway",
-            what: "A managed entry layer for REST, HTTP and WebSocket APIs. It integrates with Lambda, private integrations and other backends.",
-            use: "Used to publish APIs with authentication, throttling, request transformation and metrics.",
-            remember: ["A stage represents a deployment version or environment.", "An authorizer handles authentication and authorization.", "Throttling protects the backend.", "It is often combined with Lambda."],
-            questions: ["What is API Gateway used for?", "How do you protect an API from excessive traffic?", "What is a Lambda authorizer?", "What is the difference between REST API and HTTP API?"]
+            remember: [
+              "Multi-AZ provides high availability.",
+              "Read replicas improve read scaling.",
+              "Backup and point-in-time restore are important.",
+              "Security groups and subnet groups control networking."
+            ],
+            questions: [
+              "What is the difference between RDS and a database on EC2?",
+              "What is Multi-AZ?",
+              "What is the difference between read replica and Multi-AZ?",
+              "How do you secure RDS in private subnets?"
+            ]
           },
           {
             name: "CloudWatch / CloudTrail / AWS Config",
             type: "Observability / Audit",
             what: "CloudWatch collects metrics, logs and alerts. CloudTrail audits AWS API calls. AWS Config tracks resource configuration and compliance.",
             use: "Used for monitoring, audit, incident investigation and compliance reporting.",
-            remember: ["CloudWatch is runtime monitoring.", "CloudTrail shows who called what AWS API.", "Config shows resource configuration state and compliance.", "Log retention must be configured."],
-            questions: ["What is the difference between CloudWatch and CloudTrail?", "How do you find who deleted a resource?", "What is AWS Config used for?", "How do you create an alert for high CPU?"]
-          },
-          {
-            name: "Systems Manager",
-            type: "Operations",
-            what: "AWS Systems Manager helps manage instances, run commands, patch systems, store parameters and access instances through Session Manager.",
-            use: "Used for secure EC2 administration without opening SSH/RDP to the internet, patch management and operations automation.",
-            remember: ["SSM Agent must run on the instance.", "The instance needs an IAM role.", "Session Manager can replace direct SSH/RDP in many scenarios.", "Parameter Store can hold configuration and secrets."],
-            questions: ["How do you connect to EC2 without a public IP?", "What is Session Manager?", "What conditions does EC2 need for SSM?", "What is the difference between Parameter Store and Secrets Manager?"]
-          },
-          {
-            name: "Secrets Manager / Parameter Store / KMS",
-            type: "Secrets / Encryption",
-            what: "Secrets Manager manages secrets and rotation. Parameter Store holds configuration parameters and can store secure strings. KMS manages encryption keys.",
-            use: "Used to securely store passwords, connection strings, API keys and encryption keys without putting them in code.",
-            remember: ["KMS keys encrypt data or data keys.", "Secrets Manager supports secret rotation.", "IAM policies control access to secrets.", "Never commit secrets to Git."],
-            questions: ["When would you use Secrets Manager versus Parameter Store?", "What does KMS do?", "How does an application securely read a secret?", "How do you handle password rotation?"]
+            remember: [
+              "CloudWatch is runtime monitoring.",
+              "CloudTrail shows who called what AWS API.",
+              "Config shows resource configuration state and compliance.",
+              "Log retention must be configured."
+            ],
+            questions: [
+              "What is the difference between CloudWatch and CloudTrail?",
+              "How do you find who deleted a resource?",
+              "What is AWS Config used for?",
+              "How do you create an alert for high CPU?"
+            ]
           }
         ]
       },
@@ -1033,32 +1081,72 @@
             type: "Pipeline basics",
             what: "CI means Continuous Integration: regular build, test and integration of changes. CD can mean Continuous Delivery or Continuous Deployment.",
             use: "CI reduces merge risk. CD automates the release process and shortens the time from commit to production.",
-            remember: ["Continuous Delivery prepares a release, but production deployment may require manual approval.", "Continuous Deployment deploys automatically after checks pass.", "A pipeline should be repeatable.", "Every build should have a traceable artifact."],
-            questions: ["What is the difference between Continuous Delivery and Continuous Deployment?", "What should a CI pipeline do?", "Why is an artifact important?", "How do you prevent breaking the main branch?"]
+            remember: [
+              "Continuous Delivery prepares a release, but production deployment may require manual approval.",
+              "Continuous Deployment deploys automatically after checks pass.",
+              "A pipeline should be repeatable.",
+              "Every build should have a traceable artifact."
+            ],
+            questions: [
+              "What is the difference between Continuous Delivery and Continuous Deployment?",
+              "What should a CI pipeline do?",
+              "Why is an artifact important?",
+              "How do you prevent breaking the main branch?"
+            ]
           },
           {
             name: "Pipeline stages",
             type: "Pipeline design",
             what: "Typical stages are checkout, build, unit tests, static analysis, package, security scan, publish artifact, deploy to dev/test/prod and smoke tests.",
             use: "Used to separate steps, configure approvals, retry behavior, rollback and a clear release flow.",
-            remember: ["Fail fast saves time.", "Tests should run as early as possible.", "Secrets must not appear in logs.", "Production deploys should have an audit trail."],
-            questions: ["What would a pipeline for a web API look like?", "Where would you add a security scan?", "How would you handle production approvals?", "How do you keep deployment logs?"]
+            remember: [
+              "Fail fast saves time.",
+              "Tests should run as early as possible.",
+              "Secrets must not appear in logs.",
+              "Production deploys should have an audit trail."
+            ],
+            questions: [
+              "What would a pipeline for a web API look like?",
+              "Where would you add a security scan?",
+              "How would you handle production approvals?",
+              "How do you keep deployment logs?"
+            ]
           },
           {
             name: "Deployment strategies",
             type: "Release",
             what: "Common strategies include rolling update, blue/green, canary and feature flags.",
             use: "Used to reduce deployment risk. Canary releases expose a new version to a small portion of users. Blue/green keeps two environments.",
-            remember: ["Rolling updates change instances gradually.", "Blue/green enables fast rollback by switching traffic.", "Canary requires good monitoring.", "Feature flags separate deployment from release."],
-            questions: ["What is the difference between blue/green and canary?", "How would you perform rollback?", "What should you monitor during a canary release?", "Why use feature flags?"]
+            remember: [
+              "Rolling updates change instances gradually.",
+              "Blue/green enables fast rollback by switching traffic.",
+              "Canary requires good monitoring.",
+              "Feature flags separate deployment from release."
+            ],
+            questions: [
+              "What is the difference between blue/green and canary?",
+              "How would you perform rollback?",
+              "What should you monitor during a canary release?",
+              "Why use feature flags?"
+            ]
           },
           {
             name: "Pipeline security",
             type: "Security",
             what: "Pipeline security includes protecting secrets, least privilege, approvals, audit, dependency scanning, image scanning and artifact signing.",
             use: "Pipelines often have high privileges, so they are critical security points.",
-            remember: ["Use short-lived credentials or identity federation.", "Service connections should have minimal permissions.", "Pull requests from unknown forks should not automatically receive secrets.", "Artifacts should be immutable."],
-            questions: ["How do you protect secrets in CI/CD?", "Why avoid long-lived access keys?", "What is supply chain security?", "How do you limit pipeline permissions?"]
+            remember: [
+              "Use short-lived credentials or identity federation.",
+              "Service connections should have minimal permissions.",
+              "Pull requests from unknown forks should not automatically receive secrets.",
+              "Artifacts should be immutable."
+            ],
+            questions: [
+              "How do you protect secrets in CI/CD?",
+              "Why avoid long-lived access keys?",
+              "What is supply chain security?",
+              "How do you limit pipeline permissions?"
+            ]
           }
         ]
       },
@@ -1071,40 +1159,72 @@
             type: "IaC",
             what: "Terraform is an Infrastructure as Code tool. You describe infrastructure declaratively in HCL, and Terraform creates or changes resources through providers.",
             use: "Used to create repeatable and auditable infrastructure in Azure, AWS, Kubernetes and other platforms.",
-            remember: ["Declarative means describing the desired state.", "A provider communicates with the cloud API.", "A resource is a managed object.", "A data source reads existing data."],
-            questions: ["What is Infrastructure as Code?", "What does a provider do?", "What is the difference between resource and data source?", "Why is Terraform better than manually clicking in a portal?"]
+            remember: [
+              "Declarative means describing the desired state.",
+              "A provider communicates with the cloud API.",
+              "A resource is a managed object.",
+              "A data source reads existing data."
+            ],
+            questions: [
+              "What is Infrastructure as Code?",
+              "What does a provider do?",
+              "What is the difference between resource and data source?",
+              "Why is Terraform better than manually clicking in a portal?"
+            ]
           },
           {
             name: "State",
             type: "Terraform state",
             what: "State maps Terraform configuration to real resources. Terraform uses it to know what exists and what needs to change.",
             use: "Without state, Terraform could not reliably plan changes. Teams usually use a remote backend with locking.",
-            remember: ["State can contain sensitive values.", "Remote backend enables team collaboration.", "State locking prevents parallel apply operations.", "State should not be edited manually unless necessary."],
-            questions: ["What is Terraform state used for?", "Why not use local state in a team?", "What is state locking?", "What is drift?"]
+            remember: [
+              "State can contain sensitive values.",
+              "Remote backend enables team collaboration.",
+              "State locking prevents parallel apply operations.",
+              "State should not be edited manually unless necessary."
+            ],
+            questions: [
+              "What is Terraform state used for?",
+              "Why not use local state in a team?",
+              "What is state locking?",
+              "What is drift?"
+            ]
           },
           {
             name: "Plan / Apply / Destroy / Import",
             type: "Workflow",
             what: "terraform plan shows proposed changes. terraform apply performs them. destroy removes resources. import attaches an existing resource to state.",
             use: "A common safe workflow is fmt, validate, plan, review and apply. In pipelines, the plan is often approved before apply.",
-            remember: ["A plan is not a guarantee that apply will succeed because reality can change.", "Import does not always generate ideal code.", "Destroy is dangerous in production.", "Plan output should be reviewed."],
-            questions: ["What does terraform plan do?", "When would you use import?", "How would you design a Terraform pipeline?", "How do you prevent accidental destroy?"]
+            remember: [
+              "A plan is not a guarantee that apply will succeed because reality can change.",
+              "Import does not always generate ideal code.",
+              "Destroy is dangerous in production.",
+              "Plan output should be reviewed."
+            ],
+            questions: [
+              "What does terraform plan do?",
+              "When would you use import?",
+              "How would you design a Terraform pipeline?",
+              "How do you prevent accidental destroy?"
+            ]
           },
           {
             name: "Modules, variables, outputs",
             type: "Reusable code",
             what: "A module is reusable Terraform code. Variables parameterize input. Outputs return values to the user or another module.",
             use: "Used to standardize infrastructure and reduce duplication, for example with a VNet/VPC or AKS/EKS module.",
-            remember: ["The root module is the current project.", "A child module is a called module.", "Module versioning is important.", "Variables should have types and validation."],
-            questions: ["Why use modules?", "How would you design a network module?", "What are outputs?", "How do you manage module versions?"]
-          },
-          {
-            name: "Workspaces, environments, drift",
-            type: "Operations",
-            what: "Workspaces hold multiple state files for the same configuration. Environments can be handled with workspaces, separate directories or separate pipelines and state files.",
-            use: "Used to separate dev, test and production, but in practice clear state and configuration separation is often preferred.",
-            remember: ["Drift is a difference between code/state and reality.", "terraform refresh or plan helps detect drift.", "Workspace is not a security boundary.", "Production state must be protected."],
-            questions: ["What is drift?", "How do you manage dev, test and production in Terraform?", "When are workspaces useful?", "How do you handle manual changes made outside Terraform?"]
+            remember: [
+              "The root module is the current project.",
+              "A child module is a called module.",
+              "Module versioning is important.",
+              "Variables should have types and validation."
+            ],
+            questions: [
+              "Why use modules?",
+              "How would you design a network module?",
+              "What are outputs?",
+              "How do you manage module versions?"
+            ]
           }
         ]
       },
@@ -1116,48 +1236,108 @@
             type: "Core",
             what: "A cluster is a Kubernetes environment. A node is a worker server. A pod is the smallest deployment unit and contains one or more containers.",
             use: "Used for container orchestration, scheduling, self-healing, service discovery and rolling deployments.",
-            remember: ["A pod has its own IP address.", "Containers in a pod share the network namespace.", "A pod is temporary, so production workloads are not usually deployed as standalone pods.", "The control plane manages cluster state."],
-            questions: ["What is a pod?", "What is the difference between a pod and a container?", "What does the control plane do?", "Why is a standalone pod not ideal for production?"]
+            remember: [
+              "A pod has its own IP address.",
+              "Containers in a pod share the network namespace.",
+              "A pod is temporary, so production workloads are not usually deployed as standalone pods.",
+              "The control plane manages cluster state."
+            ],
+            questions: [
+              "What is a pod?",
+              "What is the difference between a pod and a container?",
+              "What does the control plane do?",
+              "Why is a standalone pod not ideal for production?"
+            ]
           },
           {
             name: "Deployment, ReplicaSet, StatefulSet, DaemonSet",
             type: "Workloads",
             what: "Deployment manages stateless applications and ReplicaSets. StatefulSet handles stateful applications with stable identity. DaemonSet runs a pod on every node.",
             use: "Deployment is used for web/API services. StatefulSet is used for databases or systems with identity. DaemonSet is used for agents, log collectors and node components.",
-            remember: ["Deployment supports rolling update and rollback.", "StatefulSet provides stable name and storage.", "DaemonSet typically runs on every node.", "ReplicaSet maintains the number of replicas."],
-            questions: ["What is the difference between Deployment and StatefulSet?", "What is DaemonSet used for?", "How do you roll back a deployment?", "What is ReplicaSet?"]
+            remember: [
+              "Deployment supports rolling update and rollback.",
+              "StatefulSet provides stable name and storage.",
+              "DaemonSet typically runs on every node.",
+              "ReplicaSet maintains the number of replicas."
+            ],
+            questions: [
+              "What is the difference between Deployment and StatefulSet?",
+              "What is DaemonSet used for?",
+              "How do you roll back a deployment?",
+              "What is ReplicaSet?"
+            ]
           },
           {
             name: "Service, Ingress, DNS",
             type: "Networking",
             what: "Service provides a stable endpoint for pods. Ingress exposes HTTP/S services outside the cluster through an ingress controller. Kubernetes DNS enables service discovery.",
             use: "Used because pods are dynamic and their IPs change. Service and DNS provide stable communication.",
-            remember: ["ClusterIP is an internal service.", "NodePort exposes a port on nodes.", "LoadBalancer creates a cloud load balancer.", "Ingress requires an ingress controller."],
-            questions: ["What is the difference between Service and Ingress?", "What are the Kubernetes Service types?", "Why do you need an ingress controller?", "How does service discovery work?"]
+            remember: [
+              "ClusterIP is an internal service.",
+              "NodePort exposes a port on nodes.",
+              "LoadBalancer creates a cloud load balancer.",
+              "Ingress requires an ingress controller."
+            ],
+            questions: [
+              "What is the difference between Service and Ingress?",
+              "What are the Kubernetes Service types?",
+              "Why do you need an ingress controller?",
+              "How does service discovery work?"
+            ]
           },
           {
             name: "ConfigMap, Secret, RBAC",
             type: "Configuration / Security",
             what: "ConfigMap stores non-sensitive configuration. Secret stores sensitive values. RBAC defines who or what can perform actions against the Kubernetes API.",
             use: "Used to separate configuration from images and control access for users, service accounts and automation.",
-            remember: ["Secret is not automatically a strong security solution without encryption and proper access controls.", "ServiceAccount is the workload identity in a cluster.", "Role and ClusterRole define permissions.", "RoleBinding and ClusterRoleBinding assign permissions."],
-            questions: ["What is the difference between ConfigMap and Secret?", "What is ServiceAccount?", "How does Kubernetes RBAC work?", "Why should you avoid granting cluster-admin broadly?"]
+            remember: [
+              "Secret is not automatically a strong security solution without encryption and proper access controls.",
+              "ServiceAccount is the workload identity in a cluster.",
+              "Role and ClusterRole define permissions.",
+              "RoleBinding and ClusterRoleBinding assign permissions."
+            ],
+            questions: [
+              "What is the difference between ConfigMap and Secret?",
+              "What is ServiceAccount?",
+              "How does Kubernetes RBAC work?",
+              "Why should you avoid granting cluster-admin broadly?"
+            ]
           },
           {
             name: "Probes, resources, autoscaling",
             type: "Reliability",
             what: "Liveness, readiness and startup probes monitor application state. Requests and limits define CPU/RAM needs. HPA scales replica count based on metrics.",
             use: "Used for deployment stability, correct traffic routing and efficient cluster utilization.",
-            remember: ["Readiness defines whether a pod receives traffic.", "Liveness restarts a stuck container.", "Requests are used by the scheduler.", "Limits define maximum usage."],
-            questions: ["What is the difference between liveness and readiness probe?", "What happens when memory limit is exceeded?", "What are resource requests used for?", "How does HPA work?"]
+            remember: [
+              "Readiness defines whether a pod receives traffic.",
+              "Liveness restarts a stuck container.",
+              "Requests are used by the scheduler.",
+              "Limits define maximum usage."
+            ],
+            questions: [
+              "What is the difference between liveness and readiness probe?",
+              "What happens when memory limit is exceeded?",
+              "What are resource requests used for?",
+              "How does HPA work?"
+            ]
           },
           {
             name: "Troubleshooting commands",
             type: "Operations",
             what: "Common commands include kubectl get pods -A, kubectl describe pod, kubectl logs, kubectl exec, kubectl get events and kubectl rollout status.",
             use: "Used during incidents, failed deployments, networking issues or cluster health checks.",
-            remember: ["Describe shows events and failure reasons.", "Logs show container output.", "Events are often the fastest clue.", "CrashLoopBackOff means repeated container crashes."],
-            questions: ["How do you troubleshoot ImagePullBackOff?", "How do you troubleshoot CrashLoopBackOff?", "How do you find why a pod is not scheduled?", "Which kubectl commands do you use most often?"]
+            remember: [
+              "Describe shows events and failure reasons.",
+              "Logs show container output.",
+              "Events are often the fastest clue.",
+              "CrashLoopBackOff means repeated container crashes."
+            ],
+            questions: [
+              "How do you troubleshoot ImagePullBackOff?",
+              "How do you troubleshoot CrashLoopBackOff?",
+              "How do you find why a pod is not scheduled?",
+              "Which kubectl commands do you use most often?"
+            ]
           }
         ]
       },
@@ -1169,24 +1349,54 @@
             type: "Basics",
             what: "An image is an immutable template with filesystem layers and metadata. A container is a running instance of an image.",
             use: "Docker packages an application with runtime dependencies so it behaves the same in dev, test and production.",
-            remember: ["An image is built; a container is run.", "Layer cache speeds up builds.", "Containers should be disposable.", "Logs should be written to stdout/stderr."],
-            questions: ["What is the difference between an image and a container?", "Why are containers useful for CI/CD?", "What does immutable image mean?", "How do you view container logs?"]
+            remember: [
+              "An image is built; a container is run.",
+              "Layer cache speeds up builds.",
+              "Containers should be disposable.",
+              "Logs should be written to stdout/stderr."
+            ],
+            questions: [
+              "What is the difference between an image and a container?",
+              "Why are containers useful for CI/CD?",
+              "What does immutable image mean?",
+              "How do you view container logs?"
+            ]
           },
           {
             name: "Dockerfile",
             type: "Build",
             what: "A Dockerfile is a recipe for creating an image. It contains instructions such as FROM, WORKDIR, COPY, RUN, ENV, EXPOSE, CMD and ENTRYPOINT.",
             use: "Used for repeatable application image builds in CI/CD pipelines.",
-            remember: ["FROM defines the base image.", "RUN is executed during build.", "CMD and ENTRYPOINT define container startup behavior.", "Multi-stage build reduces the final image size."],
-            questions: ["What is the difference between RUN and CMD?", "What is multi-stage build used for?", "How do you reduce Docker image size?", "Why should containers not run as root?"]
+            remember: [
+              "FROM defines the base image.",
+              "RUN is executed during build.",
+              "CMD and ENTRYPOINT define container startup behavior.",
+              "Multi-stage build reduces the final image size."
+            ],
+            questions: [
+              "What is the difference between RUN and CMD?",
+              "What is multi-stage build used for?",
+              "How do you reduce Docker image size?",
+              "Why should containers not run as root?"
+            ]
           },
           {
             name: "Volumes, networks, registry",
             type: "Runtime",
             what: "A volume stores data outside the container lifecycle. A Docker network enables communication between containers. A registry stores and distributes images.",
             use: "Used for local development, persistent data, service communication and image distribution to environments.",
-            remember: ["Without a volume, container data can easily be lost.", "Bridge network is the default local network.", "Registry can be Docker Hub, ACR, ECR or another registry.", "Image tags should be specific."],
-            questions: ["What are Docker volumes used for?", "What is a container registry?", "How do containers communicate with each other?", "Why is the latest tag problematic?"]
+            remember: [
+              "Without a volume, container data can easily be lost.",
+              "Bridge network is the default local network.",
+              "Registry can be Docker Hub, ACR, ECR or another registry.",
+              "Image tags should be specific."
+            ],
+            questions: [
+              "What are Docker volumes used for?",
+              "What is a container registry?",
+              "How do containers communicate with each other?",
+              "Why is the latest tag problematic?"
+            ]
           }
         ]
       },
@@ -1198,16 +1408,36 @@
             type: "Operating system",
             what: "Windows Server provides roles and features such as IIS, file services, DNS, DHCP, Active Directory integration and remote administration.",
             use: "Used for enterprise workloads, legacy applications, domain-integrated services and Microsoft ecosystem infrastructure.",
-            remember: ["Server Manager manages roles and features.", "PowerShell is essential for automation.", "RDP access must be restricted.", "Patching and hardening are operational responsibilities."],
-            questions: ["How do you securely manage Windows Server?", "What is IIS used for?", "Why should RDP not be open to the internet?", "How do you automate Windows administration?"]
+            remember: [
+              "Server Manager manages roles and features.",
+              "PowerShell is essential for automation.",
+              "RDP access must be restricted.",
+              "Patching and hardening are operational responsibilities."
+            ],
+            questions: [
+              "How do you securely manage Windows Server?",
+              "What is IIS used for?",
+              "Why should RDP not be open to the internet?",
+              "How do you automate Windows administration?"
+            ]
           },
           {
             name: "PowerShell",
             type: "Automation",
             what: "PowerShell is a command shell and scripting language used for Windows, Azure, Microsoft 365 and cross-platform automation.",
             use: "Used to manage systems, query resources, automate repetitive tasks and build administration scripts.",
-            remember: ["Cmdlets use Verb-Noun naming.", "Objects flow through the pipeline.", "Modules extend functionality.", "Execution policy is not a security boundary by itself."],
-            questions: ["What is a cmdlet?", "How is PowerShell different from cmd.exe?", "What does the pipeline do?", "How would you automate a server check?"]
+            remember: [
+              "Cmdlets use Verb-Noun naming.",
+              "Objects flow through the pipeline.",
+              "Modules extend functionality.",
+              "Execution policy is not a security boundary by itself."
+            ],
+            questions: [
+              "What is a cmdlet?",
+              "How is PowerShell different from cmd.exe?",
+              "What does the pipeline do?",
+              "How would you automate a server check?"
+            ]
           }
         ]
       },
@@ -1219,16 +1449,36 @@
             type: "Operating system",
             what: "Linux is a common server operating system used for cloud workloads, containers, networking tools and DevOps automation.",
             use: "Used for web servers, container hosts, automation agents, Kubernetes nodes and infrastructure services.",
-            remember: ["Everything is often represented as a file.", "Permissions are based on user, group and others.", "systemd manages services on many distributions.", "Logs are commonly viewed with journalctl or files under /var/log."],
-            questions: ["How do Linux permissions work?", "How do you check service status?", "How do you inspect logs?", "What is systemd?"]
+            remember: [
+              "Everything is often represented as a file.",
+              "Permissions are based on user, group and others.",
+              "systemd manages services on many distributions.",
+              "Logs are commonly viewed with journalctl or files under /var/log."
+            ],
+            questions: [
+              "How do Linux permissions work?",
+              "How do you check service status?",
+              "How do you inspect logs?",
+              "What is systemd?"
+            ]
           },
           {
             name: "Common commands",
             type: "Operations",
             what: "Frequently used commands include ls, cd, cat, grep, find, ps, top, df, du, chmod, chown, systemctl, journalctl, curl and ssh.",
             use: "Used for troubleshooting, system administration, file inspection, service management and connectivity checks.",
-            remember: ["grep searches text.", "df shows filesystem usage.", "ps/top show processes.", "curl tests HTTP endpoints."],
-            questions: ["How do you find a process using high CPU?", "How do you check disk usage?", "How do you search logs?", "How do you test an HTTP endpoint from a server?"]
+            remember: [
+              "grep searches text.",
+              "df shows filesystem usage.",
+              "ps/top show processes.",
+              "curl tests HTTP endpoints."
+            ],
+            questions: [
+              "How do you find a process using high CPU?",
+              "How do you check disk usage?",
+              "How do you search logs?",
+              "How do you test an HTTP endpoint from a server?"
+            ]
           }
         ]
       },
@@ -1240,16 +1490,36 @@
             type: "Foundations",
             what: "TCP/IP provides network communication, DNS resolves names to addresses, and HTTP/S is the protocol used by web applications.",
             use: "Used in every cloud and DevOps environment for service connectivity, troubleshooting and application delivery.",
-            remember: ["DNS translates names to IP addresses.", "TLS secures HTTP as HTTPS.", "TCP is connection-oriented.", "Ports identify services on a host."],
-            questions: ["What does DNS do?", "What is the difference between HTTP and HTTPS?", "What is a port?", "How do you troubleshoot name resolution?"]
+            remember: [
+              "DNS translates names to IP addresses.",
+              "TLS secures HTTP as HTTPS.",
+              "TCP is connection-oriented.",
+              "Ports identify services on a host."
+            ],
+            questions: [
+              "What does DNS do?",
+              "What is the difference between HTTP and HTTPS?",
+              "What is a port?",
+              "How do you troubleshoot name resolution?"
+            ]
           },
           {
             name: "CIDR, subnets, routing",
             type: "Networking",
             what: "CIDR defines IP ranges. Subnets divide a network into smaller segments. Routing determines where traffic goes.",
             use: "Used to design cloud networks, separate tiers and connect environments safely.",
-            remember: ["Overlapping CIDR causes routing problems.", "A route table controls next hops.", "Default route is usually 0.0.0.0/0.", "Private ranges include 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/16."],
-            questions: ["What is CIDR?", "Why do subnet ranges matter?", "What is a default route?", "Why is overlapping CIDR a problem?"]
+            remember: [
+              "Overlapping CIDR causes routing problems.",
+              "A route table controls next hops.",
+              "Default route is usually 0.0.0.0/0.",
+              "Private ranges include 10.0.0.0/8, 172.16.0.0/12 and 192.168.0.0/16."
+            ],
+            questions: [
+              "What is CIDR?",
+              "Why do subnet ranges matter?",
+              "What is a default route?",
+              "Why is overlapping CIDR a problem?"
+            ]
           }
         ]
       },
@@ -1261,24 +1531,36 @@
             type: "Version control",
             what: "Git tracks source code history. Commits store changes, branches isolate work and merges combine changes.",
             use: "Used for collaboration, code review, release tracking and CI/CD triggers.",
-            remember: ["A commit should be small and meaningful.", "Branches allow parallel work.", "Merge can create conflicts.", "Remote repositories are shared copies."],
-            questions: ["What is a commit?", "What is a branch?", "How do merge conflicts happen?", "Why is Git important for CI/CD?"]
+            remember: [
+              "A commit should be small and meaningful.",
+              "Branches allow parallel work.",
+              "Merge can create conflicts.",
+              "Remote repositories are shared copies."
+            ],
+            questions: [
+              "What is a commit?",
+              "What is a branch?",
+              "How do merge conflicts happen?",
+              "Why is Git important for CI/CD?"
+            ]
           },
           {
             name: "Pull request, tags, fetch, pull",
             type: "Collaboration",
             what: "A pull request is a review workflow. Tags mark specific commits. fetch downloads remote changes. pull fetches and integrates them.",
             use: "Used for code review, releases, deployment triggers and team collaboration.",
-            remember: ["Pull request supports review before merge.", "Tags are often used for releases.", "fetch does not modify the working branch by itself.", "pull is fetch plus merge or rebase."],
-            questions: ["What is a pull request?", "What are Git tags used for?", "How does a pipeline know what to build?", "What is the difference between fetch and pull?"]
-          },
-          {
-            name: "Stash, cherry-pick, reset, revert",
-            type: "Advanced daily use",
-            what: "Stash temporarily shelves changes. Cherry-pick applies a specific commit. Reset moves a branch pointer and can change the working tree. Revert creates a new commit that undoes a previous change.",
-            use: "Used for hotfixes, cleaning local work and safely undoing changes.",
-            remember: ["Revert is safer on shared history.", "reset --hard discards local changes.", "Cherry-pick can cause conflicts.", "Stash is local."],
-            questions: ["What is the difference between reset and revert?", "When would you use cherry-pick?", "What does git stash do?", "How do you safely undo a commit on a production branch?"]
+            remember: [
+              "Pull request supports review before merge.",
+              "Tags are often used for releases.",
+              "fetch does not modify the working branch by itself.",
+              "pull is fetch plus merge or rebase."
+            ],
+            questions: [
+              "What is a pull request?",
+              "What are Git tags used for?",
+              "How does a pipeline know what to build?",
+              "What is the difference between fetch and pull?"
+            ]
           }
         ]
       },
@@ -1290,56 +1572,54 @@
             type: "Kubernetes packaging",
             what: "Helm is a package manager for Kubernetes. An application is packaged as a chart containing Kubernetes manifest templates and values in values.yaml.",
             use: "Used to simplify deployment of complex applications to Kubernetes and manage release versions.",
-            remember: ["A chart is a package.", "A release is an installed chart instance.", "values.yaml parameterizes deployment.", "Helm templates generate Kubernetes YAML."],
-            questions: ["What is a Helm chart?", "What is the difference between chart and release?", "What is values.yaml used for?", "Why use Helm instead of raw YAML files?"]
+            remember: [
+              "A chart is a package.",
+              "A release is an installed chart instance.",
+              "values.yaml parameterizes deployment.",
+              "Helm templates generate Kubernetes YAML."
+            ],
+            questions: [
+              "What is a Helm chart?",
+              "What is the difference between chart and release?",
+              "What is values.yaml used for?",
+              "Why use Helm instead of raw YAML files?"
+            ]
           },
           {
             name: "Jenkins",
             type: "CI/CD",
             what: "Jenkins is an open-source automation server for CI/CD. Pipelines are often defined in a Jenkinsfile.",
             use: "Used for build, test, deployment and process automation. It has many plugins and is often self-hosted.",
-            remember: ["Jenkinsfile is pipeline as code.", "An agent runs jobs.", "Plugins extend functionality.", "The Jenkins server requires maintenance, security and updates."],
-            questions: ["What is Jenkinsfile?", "What is the difference between controller and agent?", "How does Jenkins handle secrets?", "What are the pros and cons of self-hosted CI/CD?"]
+            remember: [
+              "Jenkinsfile is pipeline as code.",
+              "An agent runs jobs.",
+              "Plugins extend functionality.",
+              "The Jenkins server requires maintenance, security and updates."
+            ],
+            questions: [
+              "What is Jenkinsfile?",
+              "What is the difference between controller and agent?",
+              "How does Jenkins handle secrets?",
+              "What are the pros and cons of self-hosted CI/CD?"
+            ]
           },
           {
             name: "Ansible",
             type: "Configuration management",
             what: "Ansible is an automation and configuration management tool.",
             use: "Used for server configuration, package installation, service management and repeatable administration.",
-            remember: ["Inventory contains hosts.", "A playbook describes tasks.", "A module performs a specific action.", "Idempotency means repeated runs make no change when the desired state is already met."],
-            questions: ["What is an Ansible playbook?", "What does idempotency mean?", "What is the difference between Ansible and Terraform?", "What is inventory used for?"]
-          },
-          {
-            name: "MongoDB",
-            type: "NoSQL database",
-            what: "MongoDB is a document NoSQL database. It stores data as JSON/BSON-like documents inside collections.",
-            use: "Used for flexible data models, fast development and applications where a document model fits better than relational tables.",
-            remember: ["A database contains collections.", "A collection contains documents.", "Indexes are critical for performance.", "It is not a replacement for SQL in every case."],
-            questions: ["What is the difference between document and relational databases?", "What is a collection?", "Why are indexes important?", "When would you not use MongoDB?"]
-          },
-          {
-            name: "Azure Service Fabric",
-            type: "Distributed applications",
-            what: "Azure Service Fabric is a platform for running distributed applications and microservices. It supports stateless and stateful services.",
-            use: "Historically used for complex distributed applications in the Microsoft ecosystem. New projects often compare it with Kubernetes and PaaS services.",
-            remember: ["It supports stateful services.", "A cluster consists of multiple nodes.", "Applications are packaged and deployed as service packages.", "It is not the same as AKS."],
-            questions: ["What is Service Fabric?", "What is the difference between Service Fabric and Kubernetes?", "What does stateful service mean?", "Why might a company still use Service Fabric?"]
-          },
-          {
-            name: "Groovy",
-            type: "Programming / scripting",
-            what: "Groovy is a JVM language similar to Java, often used in Jenkins pipelines and scripts.",
-            use: "Used in Jenkinsfile syntax, automation and build scripts.",
-            remember: ["It runs on the JVM.", "Jenkins scripted pipeline uses Groovy.", "It is more dynamic than Java.", "For interviews, it is enough to know it mainly appears in Jenkins contexts."],
-            questions: ["Where is Groovy used in DevOps?", "What is Jenkinsfile?", "What is the difference between declarative and scripted pipeline?", "Why is Groovy related to Jenkins?"]
-          },
-          {
-            name: "Node.js",
-            type: "Runtime",
-            what: "Node.js is a JavaScript runtime for servers. It allows JavaScript to run outside the browser and is often used for APIs, tooling and build systems.",
-            use: "Used for backend services, CLI tools, frontend build pipelines and serverless functions.",
-            remember: ["npm is a package manager.", "package.json defines dependencies and scripts.", "The event loop is the basis of its asynchronous model.", "node_modules contains installed packages."],
-            questions: ["What is Node.js?", "What is package.json used for?", "What does npm install do?", "Why does Node.js often appear in CI/CD pipelines?"]
+            remember: [
+              "Inventory contains hosts.",
+              "A playbook describes tasks.",
+              "A module performs a specific action.",
+              "Idempotency means repeated runs make no change when the desired state is already met."
+            ],
+            questions: [
+              "What is an Ansible playbook?",
+              "What does idempotency mean?",
+              "What is the difference between Ansible and Terraform?",
+              "What is inventory used for?"
+            ]
           }
         ]
       }
@@ -1386,7 +1666,7 @@
 
     function renderNav() {
       const nav = document.getElementById("nav");
-      const groups = ["All", ...DATA.map(section => section.group), "Q & A"];
+      const groups = ["All", ...DATA.map(section => section.group)];
 
       nav.innerHTML = groups.map(group => `
         <button class="nav-btn ${group === activeGroup ? "active" : ""}" data-group="${escapeHtml(group)}">
@@ -1396,16 +1676,12 @@
 
       nav.querySelectorAll("button").forEach(btn => {
         btn.addEventListener("click", () => {
-          const group = btn.dataset.group;
-
-          if (group === "Q & A") {
-            document.getElementById("my-questions").scrollIntoView({ behavior: "smooth" });
-            return;
-          }
-
-          activeGroup = group;
+          activeGroup = btn.dataset.group;
           render();
-          window.scrollTo({ top: document.querySelector("main").offsetTop - 10, behavior: "smooth" });
+          window.scrollTo({
+            top: document.querySelector("main").offsetTop - 10,
+            behavior: "smooth"
+          });
         });
       });
     }
@@ -1516,114 +1792,8 @@
       renderStats(visibleCount);
     }
 
-    const STORAGE_KEY = "interview_questions_en_v1";
-
-    function loadQuestions() {
-      try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-      } catch {
-        return [];
-      }
-    }
-
-    function saveQuestions(items) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
-    }
-
-    function renderQuestions() {
-      const listEl = document.getElementById("questionList");
-      const items = loadQuestions();
-
-      if (!items.length) {
-        listEl.innerHTML = `<div class="empty">You do not have any saved custom questions yet.</div>`;
-        return;
-      }
-
-      listEl.innerHTML = items.map((item, index) => `
-        <article class="saved-q">
-          <header>
-            <div>
-              <h3>${escapeHtml(item.question)}</h3>
-              <div class="meta">
-                ${escapeHtml(item.area || "No area")} · ${escapeHtml(item.status)} · ${escapeHtml(item.date)}
-              </div>
-            </div>
-
-            <button class="danger" data-delete="${index}">Delete</button>
-          </header>
-
-          <p>${escapeHtml(item.answer || "No note.")}</p>
-        </article>
-      `).join("");
-
-      listEl.querySelectorAll("[data-delete]").forEach(btn => {
-        btn.addEventListener("click", () => {
-          const index = Number(btn.dataset.delete);
-          const items = loadQuestions();
-          items.splice(index, 1);
-          saveQuestions(items);
-          renderQuestions();
-        });
-      });
-    }
-
-    document.getElementById("addQuestion").addEventListener("click", () => {
-      const area = document.getElementById("qArea").value.trim();
-      const question = document.getElementById("qText").value.trim();
-      const answer = document.getElementById("qAnswer").value.trim();
-      const status = document.getElementById("qStatus").value;
-
-      if (!question) {
-        alert("Please enter an interview question.");
-        return;
-      }
-
-      const items = loadQuestions();
-
-      items.unshift({
-        area,
-        question,
-        answer,
-        status,
-        date: new Date().toLocaleString("en-US")
-      });
-
-      saveQuestions(items);
-
-      document.getElementById("qArea").value = "";
-      document.getElementById("qText").value = "";
-      document.getElementById("qAnswer").value = "";
-      document.getElementById("qStatus").value = "Unknown";
-
-      renderQuestions();
-    });
-
-    document.getElementById("exportQuestions").addEventListener("click", () => {
-      const data = JSON.stringify(loadQuestions(), null, 2);
-      const blob = new Blob([data], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-
-      a.href = url;
-      a.download = "my-interview-questions.json";
-      document.body.appendChild(a);
-      a.click();
-      a.remove();
-
-      URL.revokeObjectURL(url);
-    });
-
-    document.getElementById("clearQuestions").addEventListener("click", () => {
-      if (!confirm("Do you really want to delete all custom questions?")) {
-        return;
-      }
-
-      saveQuestions([]);
-      renderQuestions();
-    });
-
     document.getElementById("homeReset").addEventListener("click", () => {
-      activeGroup = "All";
+      activeGroup = "All";57
       document.getElementById("search").value = "";
       document.getElementById("openMode").value = "normal";
       render();
@@ -1634,7 +1804,6 @@
     document.getElementById("openMode").addEventListener("change", render);
 
     render();
-    renderQuestions();
   </script>
 </body>
 </html>
